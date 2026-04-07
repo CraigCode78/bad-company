@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bad Company — Project Plan</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Syne:wght@700;800&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0d0d0d;
+    --surface: #161616;
+    --border: #2a2a2a;
+    --border-bright: #3a3a3a;
+    --text-primary: #f0ede8;
+    --text-secondary: #888580;
+    --text-muted: #555250;
+    --red: #e03b2e;
+    --amber: #e8940a;
+    --blue: #3b82f6;
+    --green: #22c55e;
+    --red-bg: rgba(224,59,46,0.1);
+    --amber-bg: rgba(232,148,10,0.1);
+    --blue-bg: rgba(59,130,246,0.1);
+    --green-bg: rgba(34,197,94,0.1);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--text-primary);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    line-height: 1.6;
+    min-height: 100vh;
+    padding: 48px 24px 80px;
+  }
+
+  .container { max-width: 860px; margin: 0 auto; }
+
+  header {
+    margin-bottom: 48px;
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 32px;
+  }
+
+  .eyebrow {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    margin-bottom: 12px;
+  }
+
+  h1 {
+    font-family: 'Syne', sans-serif;
+    font-size: 42px;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    line-height: 1;
+    margin-bottom: 8px;
+  }
+
+  h1 span { color: var(--red); }
+
+  .header-meta {
+    font-size: 13px;
+    color: var(--text-secondary);
+    font-family: 'DM Mono', monospace;
+  }
+
+  .legend {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+    margin-bottom: 32px;
+  }
+
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    font-size: 12px;
+    color: var(--text-secondary);
+    font-family: 'DM Mono', monospace;
+  }
+
+  .legend-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+
+  .phase {
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    background: var(--surface);
+    margin-bottom: 10px;
+    overflow: hidden;
+    transition: border-color 0.2s;
+  }
+
+  .phase:hover { border-color: var(--border-bright); }
+
+  .phase-header {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 16px 20px;
+    cursor: pointer;
+    user-select: none;
+    transition: background 0.15s;
+  }
+
+  .phase-header:hover { background: rgba(255,255,255,0.03); }
+
+  .phase-badge {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.06em;
+    padding: 3px 10px;
+    border-radius: 20px;
+    white-space: nowrap;
+    text-transform: uppercase;
+  }
+
+  .badge-now   { background: var(--red-bg);   color: var(--red);   border: 1px solid rgba(224,59,46,0.25); }
+  .badge-soon  { background: var(--amber-bg); color: var(--amber); border: 1px solid rgba(232,148,10,0.25); }
+  .badge-next  { background: var(--blue-bg);  color: var(--blue);  border: 1px solid rgba(59,130,246,0.25); }
+  .badge-later { background: var(--green-bg); color: var(--green); border: 1px solid rgba(34,197,94,0.25); }
+
+  .phase-title {
+    font-family: 'Syne', sans-serif;
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--text-primary);
+    flex: 1;
+  }
+
+  .phase-subtitle {
+    font-size: 12px;
+    color: var(--text-muted);
+    font-family: 'DM Mono', monospace;
+    white-space: nowrap;
+  }
+
+  .phase-progress {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    color: var(--text-muted);
+    white-space: nowrap;
+    min-width: 44px;
+    text-align: right;
+  }
+
+  .chevron {
+    color: var(--text-muted);
+    font-size: 10px;
+    transition: transform 0.2s;
+    margin-left: 2px;
+    flex-shrink: 0;
+  }
+
+  .open .chevron { transform: rotate(90deg); }
+
+  .phase-body {
+    display: none;
+    padding: 0 20px 20px;
+    border-top: 1px solid var(--border);
+  }
+
+  .phase-body.visible { display: block; }
+
+  .section-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin: 20px 0 10px;
+  }
+
+  .task-row {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 7px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+    transition: opacity 0.2s;
+  }
+
+  .task-row:last-child { border-bottom: none; }
+
+  .task-row.done { opacity: 0.35; }
+  .task-row.done .task-text { text-decoration: line-through; text-decoration-color: var(--text-muted); }
+
+  .task-check {
+    flex-shrink: 0;
+    margin-top: 4px;
+    width: 15px;
+    height: 15px;
+    border-radius: 4px;
+    border: 1px solid var(--border-bright);
+    background: transparent;
+    cursor: pointer;
+    appearance: none;
+    -webkit-appearance: none;
+    position: relative;
+    transition: background 0.15s, border-color 0.15s;
+  }
+
+  .task-check:hover { border-color: var(--text-muted); }
+
+  .task-check:checked {
+    background: var(--green);
+    border-color: var(--green);
+  }
+
+  .task-check:checked::after {
+    content: '';
+    position: absolute;
+    left: 3px; top: 1px;
+    width: 5px; height: 8px;
+    border: 2px solid #0d0d0d;
+    border-top: none;
+    border-left: none;
+    transform: rotate(45deg);
+  }
+
+  .task-dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    margin-top: 7px;
+    flex-shrink: 0;
+  }
+
+  .dot-craig   { background: #a78bfa; }
+  .dot-connor  { background: #34d399; }
+  .dot-upendra { background: #fb923c; }
+  .dot-all     { background: #6b7280; }
+  .dot-jamie   { background: #fbbf24; }
+
+  .task-text {
+    font-size: 13px;
+    color: #c8c4be;
+    line-height: 1.55;
+    flex: 1;
+  }
+
+  .task-owner {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    color: var(--text-muted);
+    white-space: nowrap;
+    padding-top: 3px;
+  }
+
+  .doc-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    color: var(--green);
+    background: var(--green-bg);
+    border: 1px solid rgba(34,197,94,0.2);
+    border-radius: 4px;
+    padding: 1px 7px;
+    margin-left: 6px;
+    white-space: nowrap;
+    vertical-align: middle;
+  }
+
+  .counter {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    color: var(--text-muted);
+    text-align: right;
+    margin-top: 32px;
+    letter-spacing: 0.06em;
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <header>
+    <div class="eyebrow">Project plan · April 2026</div>
+    <h1>Bad <span>Company</span></h1>
+    <div class="header-meta">Chrome extension · Agent · iOS · Bad Score</div>
+  </header>
+
+  <div class="legend">
+    <div class="legend-item"><div class="legend-dot" style="background:#a78bfa"></div>Craig</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#34d399"></div>Connor</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#fb923c"></div>Upendra</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#fbbf24"></div>Jamie</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#f472b6"></div>Carrie</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#6b7280"></div>All</div>
+  </div>
+
+  <!-- IMMEDIATE ACTIONS -->
+  <div class="phase" id="p0">
+    <div class="phase-header open" onclick="toggle('p0')">
+      <span class="phase-badge badge-now">Now</span>
+      <span class="phase-title">Immediate Actions</span>
+      <span class="phase-subtitle">Team · commercials · ops setup</span>
+      <span class="phase-progress" id="prog-p0">0 / 12</span>
+      <span class="chevron">▶</span>
+    </div>
+    <div class="phase-body visible" id="p0-body">
+
+      <div class="section-label">Team and commercials</div>
+      <div class="task-row"><input class="task-check" type="checkbox" onchange="tick('p0',this)"><div class="task-dot dot-craig"></div><div class="task-text">Schedule a call with Upendra to run through commercials, costs, budgets, and project financials — agree the financial structure before any build spend is committed</div><div class="task-owner">Craig + Upendra</div></div>
+      <div class="task-row"><input class="task-check" type="checkbox" onchange="tick('p0',this)"><div class="task-dot dot-craig"></div><div class="task-text">Agree the technical team, roles, and responsibilities — lock this in before Phase 1 begins</div><div class="task-owner">Craig + Upendra</div></div>
+      <div class="task-row"><input class="task-check" type="checkbox" onchange="tick('p0',this)"><div class="task-dot dot-craig"></div><div class="task-text">Confirm intro call between Jamie and Upendra; brief Jamie on the project and Upendra's background beforehand</div><div class="task-owner">Craig</div></div>
+
+      <div class="section-label">Communications and ops</div>
+      <div class="task-row"><input class="task-check" type="checkbox" onchange="tick('p0',this)"><div class="task-dot dot-all"></div><div class="task-text">Agree shared comms channel (WhatsApp vs Slack) and working norms across Craig, Connor, Upendra, and Carrie</div><div class="task-owner">All</div></div>
+      <div class="task-row"><input class="task-check" type="checkbox" onchange="tick('p0',this)"><div class="task-dot dot-craig"></div><div class="task-text">Set up the Bad Company OpenClaude team agent with initial personality, memory, and project context — connect to the shared group</div><div class="task-owner">Craig</div></div>
+      <div class="task-row"><input class="task-check" type="checkbox" onchange="tick('p0',this)"><div class="task-dot dot-craig"></div><div class="task-text">Send Upendra and Carrie the recording and transcript from today's demo session</div><div class="task-owner">Craig</div></div>
+      <div class="task-row"><input class="task-check" type="checkbox" onchange="tick('p0',this)"><div class="task-dot dot-craig"></div><div class="task-text">Produce a deeper operational project plan and phase breakdown once team and budgets are locked <span class="doc-tag">Op plan</span></div><div class="task-owner">Craig</div></div>
+
+      <div class="section-label">Data source groundwork (parallel track)</div>
+      <div class="task-row"><input class="task-check" type="checkbox" onchange="tick('p0',this)"><div class="task-dot dot-craig"></div><div class="task-text">Set up a shared Google Sheet for data source candidates: columns for name, domain, coverage type, and team verdict</div><div class="task-owner">Craig</div></div>
+      <div class="task-row"><input class="task-check" type="checkbox" onchange="tick('p0',this)"><div class="task-dot dot-upendra"></div><div class="task-text">Send over trusted NGOs, indices, and data organisations to consider as inputs to the Bad Score</div><div class="task-owner">Upendra</div></div>
+      <div class="task-row"><input class="task-check" type="checkbox" onchange="tick('p0',this)"><div class="task-dot dot-connor"></div><div class="task-text">Add current data source shortlist to the shared sheet</div><div class="task-owner">Connor</div></div>
+      <div class="task-row"><input class="task-check" type="checkbox" onchange="tick('p0',this)"><div class="task-dot dot-craig"></div><div class="task-text">Update and circulate the existing data source research run</div><div class="task-owner">Craig</div></div>
+      <div class="task-row"><input class="task-check" type="checkbox" onchange="tick('p0',this)"><div class="task-dot dot-jamie"></div><div class="task-text">Share any proprietary data assets that could be useful to the Bad Score's underlying research layer</div><div class="task-owner">Jamie</div></div>
+    </div>
+  </div>
+
+  <!-- PHASE 1 -->
+  <div class="phase" id="p1">
+    <div class="phase-header" onclick="toggle('p1')">
+      <span class="phase-badge badge-soon">Phase 1</span>
+      <span class="phase-title">Data &amp; Scoring Foundation</span>
+      <span class="phase-subtitle">Sources · scoring model · Bad Score system</span>
+      <span class="phase-progress" id="prog-p1">0 / 8</span>
+      <span class="chevron">▶</span>
+    </div>
+    <div class="phase-body" id="p1-body">
+
+      <div class="section-label">Source validation</div>
+      <div class="task-row"><input class="task-check" type="checkbox" onchange="tick('p1',this)"><div class="task-dot dot-all"></div><div class="task-text">Convene a working session with the full team to review all data source candidates and agree a validated shortlist</div><div class="task-owner">All</div></div>
+      <div class="task-row"><input class="task-check" type="checkbox" onchange="tick('p1',this)"><div class="task-dot dot-craig"></div><div class="task-text">Classify each approved source by coverage type: labour, environment, consumer manipulation, financial misconduct, governance</div><div class="task-owner">Craig</div></div>
+      <div class="task-row"><input class="task-check" type="checkbox" onchange="tick('p1',this)"><div class="task-dot dot-connor"></div><div class="task-text">Test each approved source against the RAG pipeline; document retrieval quality and bias characteristics per source</div><div class="task-owner">Connor</div></div>
+
+      <div class="section-label">Scoring framework</div>
+      <div class="task-row"><input class="task-check" type="checkbox" onchange="tick('p1',this)"><div class="task-dot dot-all"></div><div class="task-text">Draft the criteria-based grading rubric — define hard thresholds per grade (A–E), e.g. any active labour violation makes an A grade impossible <span class="doc-tag">Scoring doc</span></div><div class="task-owner">All</div></div>
+      <div class="task-row"><input class="task-check" type="checkbox" onchange="tick('p1',this)"><div class="task-dot dot-craig"></div><div class="task-text">Define the trajectory component: how demonstrated improvement over time (new leadership, remediated violations, sustained clean record) is recognised and weighted</div><div class="task-owner">Craig</div></div>
+      <div class="task-row"><input class="task-check" type="checkbox" onchange="tick('p1',this)"><div class="task-dot dot-connor"></div><div class="task-text">Build a test harness that runs 20–30 well-known companies through the scoring pipeline against validated sources; output scores for team review</div><div class="task-owner">Connor</div></div>
+      <div class="task-row"><input class="task-check" type="checkbox" onchange="tick('p1',this)"><div class="task-dot dot-all"></div><div class="task-text">Review test outputs as a team, calibrate grade thresholds to produce a meaningful distribution, and lock the documented methodology</div><div class="task-owner">All</div></div>
+
+      <div class="section-label">Transparency layer</div>
+      <div class="task-row"><input class="task-check" type="checkbox" onchange="tick('p1',this)"><div class="task-dot dot-connor"></div><div class="task-text">Implement a "show methodology" view in the extension sidebar: per-source evidence, category sub-scores, and a plain-English explanation of the grade</div><div class="task-owner">Connor</div></div>
+    </div>
+  </div>
+
+  <!-- PHASE 2 -->
+  <div class="phase" id="p2">
+    <div class="phase-header" onclick="toggle('p2')">
+      <span class="phase-badge badge-next">Phase 2</span>
+      <span class="phase-title">Extension Build &amp; Close-Group Test</span>
+      <span class="phase-subtitle">Hardening · distribution resilience · testing</span>
+      <span class="phase-progress" id="prog-p2">0 / 9</span>
+      <span class="chevron">▶</span>
+    </div>
+    <div class="phase-body" id="p2-body">
+
+      <div class="section-label">Core build</div>
+      <div class="task-row"><input class="task-check" type="checkbox" onchange="tick('p2',this)"><div class="task-dot dot-connor"></div><div class="task-text">Wire validated data sources and scoring model into the extension, replacing all raw model data</div><div class="task-owner">Connor</div></div>
+      <div class="task-row"><input class="task-check" type="checkbox" onchange="tick('p2',this)"><div class="task-dot dot-connor"></div><div class="task-text">Extend dark pattern detection coverage beyond Amazon to a broader set of retailer and SaaS page types</div><div class="task-owner">Connor</div></div>
+      <div class="task-row"><input class="task-check" type="checkbox" onchange="tick('p2',this)"><div class="task-dot dot-connor"></div><div class="task-text">Prototype DOM rewrite mode: replace detected manipulative copy with honest alternatives on supported page types</div><div class="task-owner">Connor</div></div>
+      <div class="task-row"><input class="task-check" type="checkbox" onchange="tick('p2',this)"><div class="task-dot dot-craig"></div><div class="task-text">Compile the full technical readiness checklist: security, data compliance, performance, and privacy policy requirements <span class="doc-tag">Tech checklist</span></div><div class="task-owner">Craig</div></div>
+
+      <div class="section-label">Distribution resilience</div>
+      <div class="task-row"><input class="task-check" type="checkbox" onchange="tick('p2',this)"><div class="task-dot dot-connor"></div><div class="task-text">Set up a public GitHub repo with open-source licence and a self-install dev mode guide as a fallback independent of the Chrome Web Store</div><div class="task-owner">Connor</div></div>
+      <div class="task-row"><input class="task-check" type="checkbox" onchange="tick('p2',this)"><div class="task-dot dot-craig"></div><div class="task-text">Document alternative distribution routes: Firefox, Brave, direct sideload, and any additional extension stores</div><div class="task-owner">Craig</div></div>
+
+      <div class="section-label">Close-group testing</div>
+      <div class="task-row"><input class="task-check" type="checkbox" onchange="tick('p2',this)"><div class="task-dot dot-craig"></div><div class="task-text">Issue access to Upendra and Carrie for hands-on testing; gather structured feedback against an agreed set of test scenarios</div><div class="task-owner">Craig</div></div>
+      <div class="task-row"><input class="task-check" type="checkbox" onchange="tick('p2',this)"><div class="task-dot dot-jamie"></div><div class="task-text">Identify 3–5 brand-world contacts willing to test and provide feedback on scoring accuracy and UX</div><div class="task-owner">Jamie</div></div>
+      <div class="task-row"><input class="task-check" type="checkbox" onchange="tick('p2',this)"><div class="task-dot dot-all"></div><div class="task-text">Collate all tester feedback, prioritise fixes, and agree the feature set that constitutes a shippable product</div><div class="task-owner">All</div></div>
+    </div>
+  </div>
+
+  <!-- PHASE 3 -->
+  <div class="phase" id="p3">
+    <div class="phase-header" onclick="toggle('p3')">
+      <span class="phase-badge badge-next">Phase 3</span>
+      <span class="phase-title">Platform Expansion</span>
+      <span class="phase-subtitle">Agent · iOS · additional features · SLM research</span>
+      <span class="phase-progress" id="prog-p3">0 / 7</span>
+      <span class="chevron">▶</span>
+    </div>
+    <div class="phase-body" id="p3-body">
+
+      <div class="section-label">Bad Company agent</div>
+      <div class="task-row"><input class="task-check" type="checkbox" onchange="tick('p3',this)"><div class="task-dot dot-connor"></div><div class="task-text">Build the public-facing Bad Company agent (name TBD) using the same scoring pipeline; expose via OpenClaude and connect to WhatsApp for conversational company queries</div><div class="task-owner">Connor</div></div>
+      <div class="task-row"><input class="task-check" type="checkbox" onchange="tick('p3',this)"><div class="task-dot dot-connor"></div><div class="task-text">Create a Creed soul file for the agent: persona, communication style, output preferences, and memory behaviour</div><div class="task-owner">Connor</div></div>
+      <div class="task-row"><input class="task-check" type="checkbox" onchange="tick('p3',this)"><div class="task-dot dot-craig"></div><div class="task-text">Run a small-group WhatsApp test of the agent to validate the conversational UX before wider rollout</div><div class="task-owner">Craig</div></div>
+
+      <div class="section-label">iOS share extension</div>
+      <div class="task-row"><input class="task-check" type="checkbox" onchange="tick('p3',this)"><div class="task-dot dot-connor"></div><div class="task-text">Build the Bad Company iOS share extension: users share screenshots from any app and receive an instant Bad Score analysis</div><div class="task-owner">Connor</div></div>
+      <div class="task-row"><input class="task-check" type="checkbox" onchange="tick('p3',this)"><div class="task-dot dot-craig"></div><div class="task-text">Manage Apple developer account requirements and App Store submission (Connor requires a parent/guardian account until he turns 18)</div><div class="task-owner">Craig</div></div>
+
+      <div class="section-label">Additional features</div>
+      <div class="task-row"><input class="task-check" type="checkbox" onchange="tick('p3',this)"><div class="task-dot dot-all"></div><div class="task-text">Prioritise and begin building the next tier of features from the feature pillars (dark pattern highlighter, class action lookup, political donation tracker, Bad Government feed) based on test feedback</div><div class="task-owner">All</div></div>
+
+      <div class="section-label">Small language model (parallel research track)</div>
+      <div class="task-row"><input class="task-check" type="checkbox" onchange="tick('p3',this)"><div class="task-dot dot-craig"></div><div class="task-text">Scope the SLM approach: identify a suitable open base model, define training data requirements from the curated source set, and produce a cost and effort estimate — commit to build only once data volume justifies it</div><div class="task-owner">Craig + Connor</div></div>
+    </div>
+  </div>
+
+  <!-- PHASE 4 -->
+  <div class="phase" id="p4">
+    <div class="phase-header" onclick="toggle('p4')">
+      <span class="phase-badge badge-later">Phase 4</span>
+      <span class="phase-title">Full Launch</span>
+      <span class="phase-subtitle">Security · public identity · press · deployment</span>
+      <span class="phase-progress" id="prog-p4">0 / 6</span>
+      <span class="chevron">▶</span>
+    </div>
+    <div class="phase-body" id="p4-body">
+
+      <div class="section-label">Technical hardening</div>
+      <div class="task-row"><input class="task-check" type="checkbox" onchange="tick('p4',this)"><div class="task-dot dot-craig"></div><div class="task-text">Bring in CTO resource to conduct a full security, compliance, and infrastructure review against the technical readiness checklist</div><div class="task-owner">Craig</div></div>
+      <div class="task-row"><input class="task-check" type="checkbox" onchange="tick('p4',this)"><div class="task-dot dot-craig"></div><div class="task-text">Define and implement data governance policies: what user data is collected (if any), how it is stored, and the full privacy posture</div><div class="task-owner">Craig</div></div>
+
+      <div class="section-label">Public identity and pressure resilience</div>
+      <div class="task-row"><input class="task-check" type="checkbox" onchange="tick('p4',this)"><div class="task-dot dot-craig"></div><div class="task-text">Identify and engage a high-profile public advocate who can carry the project in public conversation and act as a counterweight to corporate removal pressure</div><div class="task-owner">Craig + Upendra</div></div>
+      <div class="task-row"><input class="task-check" type="checkbox" onchange="tick('p4',this)"><div class="task-dot dot-craig"></div><div class="task-text">Develop the Bad Score as a standalone trust signal: certification criteria, badge asset, and a landing page companies can link to</div><div class="task-owner">Craig</div></div>
+
+      <div class="section-label">Press and distribution</div>
+      <div class="task-row"><input class="task-check" type="checkbox" onchange="tick('p4',this)"><div class="task-dot dot-craig"></div><div class="task-text">Build a press and outreach strategy leveraging Jamie's media connections; agree embargo timing and launch narrative</div><div class="task-owner">Craig + Jamie</div></div>
+
+      <div class="section-label">Launch</div>
+      <div class="task-row"><input class="task-check" type="checkbox" onchange="tick('p4',this)"><div class="task-dot dot-all"></div><div class="task-text">Submit to the Chrome Web Store, publish the GitHub repo publicly, and launch the agent and iOS share extension simultaneously</div><div class="task-owner">All</div></div>
+    </div>
+  </div>
+
+  <div class="counter" id="global-counter">0 / 42 tasks complete · Generated 3 April 2026</div>
+
+</div>
+
+<script>
+const totals = { p0: 12, p1: 8, p2: 9, p3: 7, p4: 6 };
+const done = { p0: 0, p1: 0, p2: 0, p3: 0, p4: 0 };
+
+function tick(phase, cb) {
+  const row = cb.closest('.task-row');
+  row.classList.toggle('done', cb.checked);
+  done[phase] = document.querySelectorAll('#' + phase + '-body .task-check:checked').length;
+  document.getElementById('prog-' + phase).textContent = done[phase] + ' / ' + totals[phase];
+  const total = Object.values(totals).reduce(function(a,b){ return a+b; }, 0);
+  const completed = Object.values(done).reduce(function(a,b){ return a+b; }, 0);
+  document.getElementById('global-counter').textContent = completed + ' / ' + total + ' tasks complete · Generated 3 April 2026';
+}
+
+function toggle(id) {
+  const card = document.getElementById(id);
+  const body = document.getElementById(id + '-body');
+  const header = card.querySelector('.phase-header');
+  const isOpen = body.classList.contains('visible');
+  body.classList.toggle('visible', !isOpen);
+  header.classList.toggle('open', !isOpen);
+}
+</script>
+</body>
+</html>

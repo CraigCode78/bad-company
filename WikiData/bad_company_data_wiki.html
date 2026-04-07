@@ -1,0 +1,1538 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bad Company — Data Source Wiki</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Fraunces:ital,wght@0,300;0,600;0,700;1,300&family=Inter:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --red: #C8392B;
+    --red-light: #FBE9E7;
+    --red-mid: #E57368;
+    --ink: #1A1A1A;
+    --ink-2: #444;
+    --ink-3: #777;
+    --surface: #FAFAF8;
+    --border: #E5E2DA;
+    --border-strong: #CCC9C0;
+    --labour: #1A4A8A;
+    --labour-bg: #EBF0FA;
+    --labour-dot: #4A7EC7;
+    --env: #1A6640;
+    --env-bg: #E7F5EE;
+    --env-dot: #3DA869;
+    --consumer: #8A4A00;
+    --consumer-bg: #FAF0E0;
+    --consumer-dot: #D4860F;
+    --gov: #5A1A7A;
+    --gov-bg: #F3EBF9;
+    --gov-dot: #9A4DC0;
+    --cross: #4A3A2A;
+    --cross-bg: #F3EFE8;
+    --cross-dot: #A08060;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Inter', sans-serif;
+    background: #F5F3EE;
+    color: var(--ink);
+    font-size: 14px;
+    line-height: 1.6;
+  }
+  .page-wrap { max-width: 960px; margin: 0 auto; padding: 0 24px 80px; }
+
+  /* HEADER */
+  header {
+    border-bottom: 2px solid var(--ink);
+    padding: 40px 0 28px;
+    margin-bottom: 36px;
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 16px;
+  }
+  .logo-area h1 {
+    font-family: 'Fraunces', serif;
+    font-size: 38px;
+    font-weight: 700;
+    letter-spacing: -1px;
+    line-height: 1;
+  }
+  .logo-area h1 span { color: var(--red); }
+  .logo-area .sub {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: var(--ink-3);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-top: 6px;
+  }
+  .header-meta {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: var(--ink-3);
+    text-align: right;
+    line-height: 1.8;
+  }
+  .header-meta strong { color: var(--ink-2); }
+
+  /* INTRO */
+  .intro-band {
+    background: var(--ink);
+    color: #fff;
+    border-radius: 8px;
+    padding: 24px 28px;
+    margin-bottom: 36px;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    gap: 20px;
+  }
+  .intro-stat { text-align: center; }
+  .intro-stat .num {
+    font-family: 'Fraunces', serif;
+    font-size: 32px;
+    font-weight: 600;
+    color: #fff;
+    display: block;
+  }
+  .intro-stat .lbl {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    color: rgba(255,255,255,0.55);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+  }
+
+  /* FILTERS */
+  .filters {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-bottom: 28px;
+    align-items: center;
+  }
+  .filter-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: var(--ink-3);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    margin-right: 4px;
+  }
+  .filter-btn {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    padding: 5px 12px;
+    border-radius: 99px;
+    border: 1px solid var(--border-strong);
+    background: white;
+    cursor: pointer;
+    transition: all 0.15s;
+    letter-spacing: 0.04em;
+  }
+  .filter-btn:hover, .filter-btn.active { background: var(--ink); color: white; border-color: var(--ink); }
+  .filter-btn[data-cat="Labour"].active { background: var(--labour); border-color: var(--labour); }
+  .filter-btn[data-cat="Environment"].active { background: var(--env); border-color: var(--env); }
+  .filter-btn[data-cat="Consumer"].active { background: var(--consumer); border-color: var(--consumer); }
+  .filter-btn[data-cat="Governance"].active { background: var(--gov); border-color: var(--gov); }
+  .filter-btn[data-cat="Cross"].active { background: var(--cross); border-color: var(--cross); }
+
+  /* SECTION HEADERS */
+  .section-head {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin: 36px 0 16px;
+    padding-bottom: 10px;
+    border-bottom: 1.5px solid var(--border);
+  }
+  .section-dot {
+    width: 12px; height: 12px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+  .section-head h2 {
+    font-family: 'Fraunces', serif;
+    font-size: 20px;
+    font-weight: 600;
+    letter-spacing: -0.3px;
+  }
+  .section-head .count {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: var(--ink-3);
+    margin-left: auto;
+  }
+
+  /* SOURCE CARDS */
+  .source-grid { display: flex; flex-direction: column; gap: 12px; }
+  .source-card {
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    overflow: hidden;
+    transition: border-color 0.15s;
+  }
+  .source-card:hover { border-color: var(--border-strong); }
+  .card-header {
+    display: flex;
+    align-items: stretch;
+    cursor: pointer;
+    padding: 0;
+  }
+  .card-accent {
+    width: 4px;
+    flex-shrink: 0;
+    border-radius: 0;
+  }
+  .card-main {
+    flex: 1;
+    padding: 16px 18px;
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 12px;
+  }
+  .card-title-area { flex: 1; }
+  .card-name {
+    font-family: 'Fraunces', serif;
+    font-size: 16px;
+    font-weight: 600;
+    letter-spacing: -0.2px;
+    color: var(--ink);
+  }
+  .card-domain {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: var(--ink-3);
+    margin-top: 2px;
+  }
+  .card-tagline {
+    font-size: 13px;
+    color: var(--ink-2);
+    margin-top: 5px;
+    line-height: 1.45;
+  }
+  .card-meta {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 6px;
+    flex-shrink: 0;
+  }
+  .access-badge {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    padding: 3px 8px;
+    border-radius: 4px;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    font-weight: 500;
+  }
+  .access-free { background: #E7F5EE; color: #1A6640; }
+  .access-partial { background: #FAF0E0; color: #8A4A00; }
+  .access-paid { background: #FBE9E7; color: #C8392B; }
+  .access-api { background: #EBF0FA; color: #1A4A8A; }
+  .card-toggle {
+    font-size: 16px;
+    color: var(--ink-3);
+    margin-top: 2px;
+    user-select: none;
+    transition: transform 0.2s;
+  }
+  .card-toggle.open { transform: rotate(180deg); }
+
+  .card-body {
+    display: none;
+    padding: 0 18px 18px 22px;
+    border-top: 1px solid var(--border);
+  }
+  .card-body.open { display: block; }
+
+  .detail-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-top: 14px;
+  }
+  .detail-block h4 {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--ink-3);
+    margin-bottom: 5px;
+  }
+  .detail-block p, .detail-block li {
+    font-size: 13px;
+    color: var(--ink-2);
+    line-height: 1.55;
+  }
+  .detail-block ul {
+    padding-left: 16px;
+  }
+  .detail-block li { margin-bottom: 3px; }
+  .detail-block a {
+    color: var(--red);
+    text-decoration: none;
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    word-break: break-all;
+  }
+  .detail-block a:hover { text-decoration: underline; }
+  .use-tag {
+    display: inline-block;
+    background: #F3EFE8;
+    color: var(--cross);
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    padding: 3px 8px;
+    border-radius: 4px;
+    margin: 2px 2px 2px 0;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+  .tier-badge {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    padding: 3px 8px;
+    border-radius: 4px;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+  .tier-1 { background: #1A1A1A; color: white; }
+  .tier-2 { background: #E5E2DA; color: #444; }
+  .tier-3 { background: #FAF0E0; color: #8A4A00; }
+
+  footer {
+    margin-top: 60px;
+    padding-top: 24px;
+    border-top: 1px solid var(--border);
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: var(--ink-3);
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  @media (max-width: 600px) {
+    .intro-band { grid-template-columns: 1fr 1fr; }
+    .detail-grid { grid-template-columns: 1fr; }
+    .card-meta { flex-direction: row; align-items: center; }
+  }
+</style>
+</head>
+<body>
+<div class="page-wrap">
+
+  <header>
+    <div class="logo-area">
+      <h1>Bad <span>Company</span></h1>
+      <div class="sub">Data Source Registry — Internal Wiki v1.0</div>
+    </div>
+    <div class="header-meta">
+      <div><strong>34</strong> validated sources</div>
+      <div><strong>5</strong> scoring dimensions</div>
+      <div>Last researched: April 2026</div>
+    </div>
+  </header>
+
+  <div class="intro-band">
+    <div class="intro-stat"><span class="num">34</span><span class="lbl">Total Sources</span></div>
+    <div class="intro-stat"><span class="num">18</span><span class="lbl">Free / Open Access</span></div>
+    <div class="intro-stat"><span class="num">11</span><span class="lbl">Partial / API Access</span></div>
+    <div class="intro-stat"><span class="num">5</span><span class="lbl">Paid / Licensed</span></div>
+  </div>
+
+  <div class="filters">
+    <span class="filter-label">Filter:</span>
+    <button class="filter-btn active" data-cat="All">All sources</button>
+    <button class="filter-btn" data-cat="Labour">Labour</button>
+    <button class="filter-btn" data-cat="Environment">Environment</button>
+    <button class="filter-btn" data-cat="Consumer">Consumer</button>
+    <button class="filter-btn" data-cat="Governance">Governance</button>
+    <button class="filter-btn" data-cat="Cross">Cross-Dimensional</button>
+  </div>
+
+  <!-- LABOUR -->
+  <div class="section-head" data-section="Labour">
+    <div class="section-dot" style="background: var(--labour-dot)"></div>
+    <h2>Labour &amp; Human Rights</h2>
+    <span class="count">8 sources</span>
+  </div>
+  <div class="source-grid" id="Labour">
+
+    <div class="source-card">
+      <div class="card-header" onclick="toggle(this)">
+        <div class="card-accent" style="background: var(--labour-dot)"></div>
+        <div class="card-main">
+          <div class="card-title-area">
+            <div class="card-name">KnowTheChain</div>
+            <div class="card-domain">knowthechain.org</div>
+            <div class="card-tagline">Benchmarks major companies on forced labour risk across global supply chains — scored 0–100</div>
+          </div>
+          <div class="card-meta">
+            <span class="access-badge access-free">Free</span>
+            <span class="tier-badge tier-1">Tier 1</span>
+            <span class="card-toggle">▾</span>
+          </div>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="detail-grid">
+          <div class="detail-block">
+            <h4>What it covers</h4>
+            <p>Annual benchmarks of 45–60 of the world's largest companies in apparel and footwear, food and beverage, and ICT. Scores companies 0–100 across seven themes: commitment and governance, traceability, risk assessment, purchasing practices, recruitment, worker voice, and remedy. Publicly available company scorecards with downloadable datasets.</p>
+          </div>
+          <div class="detail-block">
+            <h4>How to use in Bad Company</h4>
+            <ul>
+              <li>Direct score input for the Labour dimension</li>
+              <li>Identifies specific supply chain red flags (e.g. Xinjiang/Uyghur forced labour)</li>
+              <li>Benchmark trajectory data to reward improvement</li>
+              <li>Use as a Tier 1 anchor — cite in methodology documentation</li>
+            </ul>
+          </div>
+          <div class="detail-block">
+            <h4>Access &amp; URL</h4>
+            <a href="https://knowthechain.org" target="_blank">knowthechain.org</a><br><br>
+            <p>Free public access to benchmark reports, company scorecards, and downloadable datasets. No API currently — scrape or download Excel files.</p>
+          </div>
+          <div class="detail-block">
+            <h4>Notes &amp; limitations</h4>
+            <p>Covers three sectors only. Updated annually. Average ICT company scored just 20/100 in 2025; food and beverage average was 16/100. Strong on forced labour specifically, less comprehensive on wider labour conditions.</p>
+          </div>
+        </div>
+        <div style="margin-top: 12px;">
+          <span class="use-tag">supply chain</span><span class="use-tag">forced labour</span><span class="use-tag">benchmarks</span><span class="use-tag">downloadable data</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="source-card">
+      <div class="card-header" onclick="toggle(this)">
+        <div class="card-accent" style="background: var(--labour-dot)"></div>
+        <div class="card-main">
+          <div class="card-title-area">
+            <div class="card-name">Business &amp; Human Rights Resource Centre</div>
+            <div class="card-domain">business-humanrights.org</div>
+            <div class="card-tagline">The world's most comprehensive tracker of corporate human rights allegations — 20,000+ companies, open API</div>
+          </div>
+          <div class="card-meta">
+            <span class="access-badge access-api">API</span>
+            <span class="tier-badge tier-1">Tier 1</span>
+            <span class="card-toggle">▾</span>
+          </div>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="detail-grid">
+          <div class="detail-block">
+            <h4>What it covers</h4>
+            <p>Real-time tracking of human rights allegations against over 20,000 companies in 180+ countries. Includes company responses to allegations (60% global response rate), lawsuit profiles, supply chain data, civil society benchmarks and investor-focused dashboards. Tracks 50,000+ stories with 70,000+ linked components. Has an open JSON API.</p>
+          </div>
+          <div class="detail-block">
+            <h4>How to use in Bad Company</h4>
+            <ul>
+              <li>Primary alert system for Labour and Governance dimensions</li>
+              <li>Query the API for a company name to return live allegations</li>
+              <li>Company response data shows accountability behaviour</li>
+              <li>Lawsuit database feeds the "Police Report" feature</li>
+              <li>Partner source to KnowTheChain data</li>
+            </ul>
+          </div>
+          <div class="detail-block">
+            <h4>Access &amp; URL</h4>
+            <a href="https://www.business-humanrights.org" target="_blank">business-humanrights.org</a><br><br>
+            <p>Fully open access. JSON API available for programmatic querying of stories, companies, categories and components. Ask Connor to map the API schema — it returns structured data on all allegations.</p>
+          </div>
+          <div class="detail-block">
+            <h4>Notes &amp; limitations</h4>
+            <p>Coverage depends on NGO and media reporting — under-reporting risk in low-visibility regions. Not a structured scoring system; requires Bad Company to develop its own scoring logic on top of the raw data. Best combined with structured benchmarks like WBA.</p>
+          </div>
+        </div>
+        <div style="margin-top: 12px;">
+          <span class="use-tag">allegations</span><span class="use-tag">open api</span><span class="use-tag">lawsuits</span><span class="use-tag">real-time</span><span class="use-tag">global</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="source-card">
+      <div class="card-header" onclick="toggle(this)">
+        <div class="card-accent" style="background: var(--labour-dot)"></div>
+        <div class="card-main">
+          <div class="card-title-area">
+            <div class="card-name">World Benchmarking Alliance — Social &amp; CHRB</div>
+            <div class="card-domain">worldbenchmarkingalliance.org</div>
+            <div class="card-tagline">Social benchmark of the world's 2,000 most influential companies — 18 core social indicators, free Excel download</div>
+          </div>
+          <div class="card-meta">
+            <span class="access-badge access-free">Free</span>
+            <span class="tier-badge tier-1">Tier 1</span>
+            <span class="card-toggle">▾</span>
+          </div>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="detail-grid">
+          <div class="detail-block">
+            <h4>What it covers</h4>
+            <p>The WBA Social Benchmark assesses the world's 2,000 most influential companies (the SDG2000) across 18 core social indicators spanning human rights, decent work, and ethical conduct. The Corporate Human Rights Benchmark (CHRB) goes deeper on ~100 companies across five high-risk sectors. All data is publicly downloadable in Excel format. Updated annually.</p>
+          </div>
+          <div class="detail-block">
+            <h4>How to use in Bad Company</h4>
+            <ul>
+              <li>One of the broadest company universes available (2,000 companies)</li>
+              <li>Download the full dataset for integration into the scoring engine</li>
+              <li>CHRB scores feed the Labour and Governance dimensions</li>
+              <li>Gender Benchmark data available for gender-equity scoring</li>
+            </ul>
+          </div>
+          <div class="detail-block">
+            <h4>Access &amp; URL</h4>
+            <a href="https://www.worldbenchmarkingalliance.org/company-scoreboard" target="_blank">worldbenchmarkingalliance.org/company-scoreboard</a><br><br>
+            <a href="https://www.worldbenchmarkingalliance.org/research/2024-social-benchmark-data-set/" target="_blank">2024 Social Benchmark data download</a><br><br>
+            <p>All benchmark data is free, open and downloadable. No API — use the Excel download links on each benchmark page.</p>
+          </div>
+          <div class="detail-block">
+            <h4>Notes &amp; limitations</h4>
+            <p>Only 11% of assessed companies have a lobbying transparency policy. Scores are updated annually. Strongest for large public companies; coverage thins for smaller or private companies. Data is derived from public disclosures, so self-reporting bias applies.</p>
+          </div>
+        </div>
+        <div style="margin-top: 12px;">
+          <span class="use-tag">2000 companies</span><span class="use-tag">social indicators</span><span class="use-tag">excel download</span><span class="use-tag">CHRB</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="source-card">
+      <div class="card-header" onclick="toggle(this)">
+        <div class="card-accent" style="background: var(--labour-dot)"></div>
+        <div class="card-main">
+          <div class="card-title-area">
+            <div class="card-name">Fairwork Foundation</div>
+            <div class="card-domain">fair.work</div>
+            <div class="card-tagline">Scores gig economy platforms (Uber, Deliveroo, etc.) on fair pay, conditions, contracts, management, and representation — 0–10</div>
+          </div>
+          <div class="card-meta">
+            <span class="access-badge access-free">Free</span>
+            <span class="tier-badge tier-2">Tier 2</span>
+            <span class="card-toggle">▾</span>
+          </div>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="detail-grid">
+          <div class="detail-block">
+            <h4>What it covers</h4>
+            <p>Oxford University-based research project scoring digital labour platforms in 24 countries against five principles of fair work. Scores 280+ platforms from 0–10. Covers ride-hailing, food delivery, domestic services, and freelance/cloud work platforms. Annual reports with country-specific ratings. Cited in UK legal judgments on gig worker rights.</p>
+          </div>
+          <div class="detail-block">
+            <h4>How to use in Bad Company</h4>
+            <ul>
+              <li>Specifically relevant for gig-economy brands (Uber, Deliveroo, Just Eat, Bolt, etc.)</li>
+              <li>Use the online search tool to pull scores for specific platforms</li>
+              <li>UK-specific ratings available — relevant for British user base</li>
+              <li>Strong credibility: academic methodology, platforms invited to respond</li>
+            </ul>
+          </div>
+          <div class="detail-block">
+            <h4>Access &amp; URL</h4>
+            <a href="https://fair.work/en/fw/homepage/" target="_blank">fair.work/en/fw/homepage</a><br><br>
+            <a href="https://fair.work/en/ratings/uk/" target="_blank">UK platform ratings</a><br><br>
+            <p>Free public access to all ratings and reports. Interactive search tool available on the homepage. Country-specific pages for UK, US, Germany, and 20+ others.</p>
+          </div>
+          <div class="detail-block">
+            <h4>Notes &amp; limitations</h4>
+            <p>Limited to gig/platform economy. Does not cover traditional employment. Coverage deepest in South Africa, India, UK, and Germany. Best used as a supplementary source for the specific sector. Published annually per country.</p>
+          </div>
+        </div>
+        <div style="margin-top: 12px;">
+          <span class="use-tag">gig economy</span><span class="use-tag">platform work</span><span class="use-tag">UK coverage</span><span class="use-tag">academic</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="source-card">
+      <div class="card-header" onclick="toggle(this)">
+        <div class="card-accent" style="background: var(--labour-dot)"></div>
+        <div class="card-main">
+          <div class="card-title-area">
+            <div class="card-name">US Department of Labor — ILAB</div>
+            <div class="card-domain">dol.gov/agencies/ilab</div>
+            <div class="card-tagline">Official US government list of goods produced by child labour and forced labour — by country and product category</div>
+          </div>
+          <div class="card-meta">
+            <span class="access-badge access-free">Free</span>
+            <span class="tier-badge tier-2">Tier 2</span>
+            <span class="card-toggle">▾</span>
+          </div>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="detail-grid">
+          <div class="detail-block">
+            <h4>What it covers</h4>
+            <p>The ILAB "List of Goods Produced by Child Labor or Forced Labor" (TVPRA list) covers specific goods from specific countries — including electronics from China, cotton from Uzbekistan, and cobalt from the DRC. Updated regularly. Useful for supply chain risk mapping by product and country of origin.</p>
+          </div>
+          <div class="detail-block">
+            <h4>How to use in Bad Company</h4>
+            <ul>
+              <li>Map product categories to supply chain risk</li>
+              <li>Context layer for KnowTheChain and BHRRC data</li>
+              <li>Use for sector-specific risk weighting (e.g. electronics, fast fashion)</li>
+              <li>Useful for the "Shop Your Values" feature pillar</li>
+            </ul>
+          </div>
+          <div class="detail-block">
+            <h4>Access &amp; URL</h4>
+            <a href="https://www.dol.gov/agencies/ilab/reports/child-labor/list-of-goods" target="_blank">dol.gov — ILAB List of Goods</a><br><br>
+            <p>Free public access. Data available as PDF and downloadable tables. No formal API but data is structured enough to parse programmatically.</p>
+          </div>
+          <div class="detail-block">
+            <h4>Notes &amp; limitations</h4>
+            <p>US government source — authoritative but geopolitically influenced. Does not score companies directly; scores country/product pairs. Best used as a risk context layer rather than a direct company score input.</p>
+          </div>
+        </div>
+        <div style="margin-top: 12px;">
+          <span class="use-tag">government</span><span class="use-tag">child labour</span><span class="use-tag">country risk</span><span class="use-tag">supply chain</span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ENVIRONMENT -->
+  <div class="section-head" data-section="Environment">
+    <div class="section-dot" style="background: var(--env-dot)"></div>
+    <h2>Environmental</h2>
+    <span class="count">7 sources</span>
+  </div>
+  <div class="source-grid" id="Environment">
+
+    <div class="source-card">
+      <div class="card-header" onclick="toggle(this)">
+        <div class="card-accent" style="background: var(--env-dot)"></div>
+        <div class="card-main">
+          <div class="card-title-area">
+            <div class="card-name">CDP (Carbon Disclosure Project)</div>
+            <div class="card-domain">cdp.net</div>
+            <div class="card-tagline">Global disclosure system for environmental data — 25,000+ companies scored A–D on climate, water, and deforestation</div>
+          </div>
+          <div class="card-meta">
+            <span class="access-badge access-partial">Partial</span>
+            <span class="tier-badge tier-1">Tier 1</span>
+            <span class="card-toggle">▾</span>
+          </div>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="detail-grid">
+          <div class="detail-block">
+            <h4>What it covers</h4>
+            <p>Company-reported environmental data across climate change, water security, and deforestation. Over 23,100 organisations disclosed in 2025. Scores run D– to A; A-list represents environmental leadership. Backed by 800+ institutional investors with $100 trillion in assets. Covers two-thirds of global market capitalisation. Annual cycle.</p>
+          </div>
+          <div class="detail-block">
+            <h4>How to use in Bad Company</h4>
+            <ul>
+              <li>A–D score feeds directly into the Environmental dimension</li>
+              <li>A-list membership is a strong positive signal — rewards improvement</li>
+              <li>Absence of disclosure is itself a negative signal</li>
+              <li>Deforestation and water data goes beyond basic carbon metrics</li>
+            </ul>
+          </div>
+          <div class="detail-block">
+            <h4>Access &amp; URL</h4>
+            <a href="https://www.cdp.net/en/data/scores" target="_blank">cdp.net/en/data/scores</a><br><br>
+            <p>Public A-lists and headline scores are free. Full disclosure responses now require a data licence or membership. Consider a research/non-commercial agreement with CDP — they have a specific pathway for NGO/accountability use.</p>
+          </div>
+          <div class="detail-block">
+            <h4>Notes &amp; limitations</h4>
+            <p>Data is self-reported; companies must opt in. Non-disclosure receives a score but companies can choose not to engage. Detailed response data now behind paywall as of 2025 — a significant change. Public scores remain available. Negotiate a data partnership early.</p>
+          </div>
+        </div>
+        <div style="margin-top: 12px;">
+          <span class="use-tag">climate</span><span class="use-tag">water</span><span class="use-tag">deforestation</span><span class="use-tag">A–D scores</span><span class="use-tag">25,000 companies</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="source-card">
+      <div class="card-header" onclick="toggle(this)">
+        <div class="card-accent" style="background: var(--env-dot)"></div>
+        <div class="card-main">
+          <div class="card-title-area">
+            <div class="card-name">InfluenceMap / LobbyMap</div>
+            <div class="card-domain">influencemap.org / lobbymap.org</div>
+            <div class="card-tagline">The world's leading database on corporate climate lobbying — 1,000 companies graded weekly, open source</div>
+          </div>
+          <div class="card-meta">
+            <span class="access-badge access-free">Free</span>
+            <span class="tier-badge tier-1">Tier 1</span>
+            <span class="card-toggle">▾</span>
+          </div>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="detail-grid">
+          <div class="detail-block">
+            <h4>What it covers</h4>
+            <p>LobbyMap tracks and scores climate policy engagement for 1,000 companies and 330 industry associations globally. Scores range from A (supports Paris-aligned policy) to F (obstructing climate action). Updated weekly. Open source and free to use. Also runs FinanceMap (asset manager climate analysis) and Carbon Majors (historical emissions from 122 producers).</p>
+          </div>
+          <div class="detail-block">
+            <h4>How to use in Bad Company</h4>
+            <ul>
+              <li>Unique signal: captures what companies actually lobby for, not just what they claim</li>
+              <li>Use LobbyMap grade as a "greenwashing risk" indicator</li>
+              <li>Cross-reference with CDP score — misalignment is a strong red flag</li>
+              <li>Feeds the "Buy Less Shit / Bad Government" pillars</li>
+            </ul>
+          </div>
+          <div class="detail-block">
+            <h4>Access &amp; URL</h4>
+            <a href="https://lobbymap.org" target="_blank">lobbymap.org</a><br><br>
+            <a href="https://influencemap.org/terms" target="_blank">influencemap.org/terms (open source licence)</a><br><br>
+            <p>Content is open source and free to use under InfluenceMap's terms. Data is updated weekly. No formal API, but company profiles are URL-structured and parseable.</p>
+          </div>
+          <div class="detail-block">
+            <h4>Notes &amp; limitations</h4>
+            <p>Does not score internal company operations — focuses purely on policy engagement. Best used as a governance-plus-environment signal rather than an emissions data source. Methodology is transparent and well-documented.</p>
+          </div>
+        </div>
+        <div style="margin-top: 12px;">
+          <span class="use-tag">climate lobbying</span><span class="use-tag">weekly updates</span><span class="use-tag">open source</span><span class="use-tag">greenwash signal</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="source-card">
+      <div class="card-header" onclick="toggle(this)">
+        <div class="card-accent" style="background: var(--env-dot)"></div>
+        <div class="card-main">
+          <div class="card-title-area">
+            <div class="card-name">Science Based Targets initiative (SBTi)</div>
+            <div class="card-domain">sciencebasedtargets.org</div>
+            <div class="card-tagline">Verifies whether company net-zero targets are scientifically credible — 10,000+ companies on the Target Dashboard</div>
+          </div>
+          <div class="card-meta">
+            <span class="access-badge access-free">Free</span>
+            <span class="tier-badge tier-1">Tier 1</span>
+            <span class="card-toggle">▾</span>
+          </div>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="detail-grid">
+          <div class="detail-block">
+            <h4>What it covers</h4>
+            <p>The SBTi verifies corporate net-zero and near-term targets against 1.5°C-aligned science. Target Dashboard lists all companies with validated targets or commitments, updated weekly. As of January 2026, 10,000 companies have validated targets. Dashboard also flags companies that committed but failed to submit targets (commitment removed).</p>
+          </div>
+          <div class="detail-block">
+            <h4>How to use in Bad Company</h4>
+            <ul>
+              <li>Binary signal: validated target vs. no target vs. removed commitment</li>
+              <li>"Commitment Removed" is a significant negative indicator for the Environmental score</li>
+              <li>Cross-reference with CDP score to detect greenwashing claims</li>
+              <li>Downloadable dataset available weekly from the Target Dashboard</li>
+            </ul>
+          </div>
+          <div class="detail-block">
+            <h4>Access &amp; URL</h4>
+            <a href="https://sciencebasedtargets.org/companies-taking-action" target="_blank">sciencebasedtargets.org/companies-taking-action</a><br><br>
+            <p>Full Target Dashboard is free and downloadable in Excel. Updated every Thursday. Registration not required for data access.</p>
+          </div>
+          <div class="detail-block">
+            <h4>Notes &amp; limitations</h4>
+            <p>Validates targets only — not emissions performance. A company can have a verified target but still emit heavily. Use as one signal among several. Corporate Net-Zero Standard v2.0 currently in development; methodology may shift.</p>
+          </div>
+        </div>
+        <div style="margin-top: 12px;">
+          <span class="use-tag">net zero</span><span class="use-tag">target verification</span><span class="use-tag">weekly data</span><span class="use-tag">greenwash detection</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="source-card">
+      <div class="card-header" onclick="toggle(this)">
+        <div class="card-accent" style="background: var(--env-dot)"></div>
+        <div class="card-main">
+          <div class="card-title-area">
+            <div class="card-name">As You Sow</div>
+            <div class="card-domain">asyousow.org</div>
+            <div class="card-tagline">Rates companies on plastic, climate, pay equity, and ocean health — via shareholder advocacy and independent research</div>
+          </div>
+          <div class="card-meta">
+            <span class="access-badge access-free">Free</span>
+            <span class="tier-badge tier-2">Tier 2</span>
+            <span class="card-toggle">▾</span>
+          </div>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="detail-grid">
+          <div class="detail-block">
+            <h4>What it covers</h4>
+            <p>US-based shareholder advocacy organisation that produces annual company scorecards on plastic pollution (100 largest consumer goods companies), climate accountability, CEO pay equity, ocean plastics, and firearms. Publishes detailed graded company rankings. Strong consumer-facing data on plastic packaging specifically.</p>
+          </div>
+          <div class="detail-block">
+            <h4>How to use in Bad Company</h4>
+            <ul>
+              <li>Plastic pollution scores are directly consumer-relevant and shareable</li>
+              <li>CEO pay equity ratios feed the Labour or Governance dimension</li>
+              <li>Shareholder resolution outcomes signal board accountability</li>
+              <li>High outrage potential — use in "Buy Less Shit" pillar</li>
+            </ul>
+          </div>
+          <div class="detail-block">
+            <h4>Access &amp; URL</h4>
+            <a href="https://www.asyousow.org" target="_blank">asyousow.org</a><br><br>
+            <p>Free public access to all scorecards and reports. Data presented on web pages and downloadable PDFs. No API — structured scraping feasible.</p>
+          </div>
+          <div class="detail-block">
+            <h4>Notes &amp; limitations</h4>
+            <p>US-focused. Primarily covers the 100 largest consumer goods companies. Updated annually. CEO pay data is particularly strong for Bad Company's consumer-facing narrative.</p>
+          </div>
+        </div>
+        <div style="margin-top: 12px;">
+          <span class="use-tag">plastic pollution</span><span class="use-tag">CEO pay</span><span class="use-tag">shareholder</span><span class="use-tag">consumer goods</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="source-card">
+      <div class="card-header" onclick="toggle(this)">
+        <div class="card-accent" style="background: var(--env-dot)"></div>
+        <div class="card-main">
+          <div class="card-title-area">
+            <div class="card-name">EPA Enforcement &amp; Compliance Database (ECHO)</div>
+            <div class="card-domain">echo.epa.gov</div>
+            <div class="card-tagline">US EPA enforcement actions, fines, and compliance history — publicly searchable by facility or company</div>
+          </div>
+          <div class="card-meta">
+            <span class="access-badge access-free">Free</span>
+            <span class="tier-badge tier-2">Tier 2</span>
+            <span class="card-toggle">▾</span>
+          </div>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="detail-grid">
+          <div class="detail-block">
+            <h4>What it covers</h4>
+            <p>The EPA's Enforcement and Compliance History Online (ECHO) database covers compliance records, violations, inspections, and enforcement actions for regulated facilities across the Clean Air Act, Clean Water Act, and hazardous waste laws. Searchable by company name, state, or industry sector. Covers millions of facilities.</p>
+          </div>
+          <div class="detail-block">
+            <h4>How to use in Bad Company</h4>
+            <ul>
+              <li>Specific environmental violations with penalty amounts — high credibility</li>
+              <li>Use as a cross-reference against Violation Tracker (Good Jobs First)</li>
+              <li>Facility-level data allows granular company profiling</li>
+              <li>Complements the UK's Environment Agency enforcement data</li>
+            </ul>
+          </div>
+          <div class="detail-block">
+            <h4>Access &amp; URL</h4>
+            <a href="https://echo.epa.gov" target="_blank">echo.epa.gov</a><br><br>
+            <p>Free public access with a RESTful API available. Well-documented API at echo.epa.gov/tools/web-services. Good for programmatic integration — Connor should prioritise this as an API connection.</p>
+          </div>
+          <div class="detail-block">
+            <h4>Notes &amp; limitations</h4>
+            <p>US-only. Does not cover all sectors. Facility-level data requires mapping to parent companies. Violation Tracker (Good Jobs First) already aggregates a significant portion of this — cross-check to avoid duplication of effort.</p>
+          </div>
+        </div>
+        <div style="margin-top: 12px;">
+          <span class="use-tag">US enforcement</span><span class="use-tag">EPA</span><span class="use-tag">violations</span><span class="use-tag">REST API</span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- CONSUMER -->
+  <div class="section-head" data-section="Consumer">
+    <div class="section-dot" style="background: var(--consumer-dot)"></div>
+    <h2>Consumer Manipulation</h2>
+    <span class="count">7 sources</span>
+  </div>
+  <div class="source-grid" id="Consumer">
+
+    <div class="source-card">
+      <div class="card-header" onclick="toggle(this)">
+        <div class="card-accent" style="background: var(--consumer-dot)"></div>
+        <div class="card-main">
+          <div class="card-title-area">
+            <div class="card-name">FTC Enforcement Actions (USA)</div>
+            <div class="card-domain">ftc.gov/enforcement/cases-proceedings</div>
+            <div class="card-tagline">Official US Federal Trade Commission database of deceptive practices, dark patterns, and consumer protection cases</div>
+          </div>
+          <div class="card-meta">
+            <span class="access-badge access-free">Free</span>
+            <span class="tier-badge tier-1">Tier 1</span>
+            <span class="card-toggle">▾</span>
+          </div>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="detail-grid">
+          <div class="detail-block">
+            <h4>What it covers</h4>
+            <p>The FTC's case database includes all enforcement actions for deceptive advertising, dark patterns, subscription traps, fake reviews, privacy violations, and anti-competitive behaviour. Cases include fines, consent decrees, and bans. Searchable by company name. Goes back decades with ongoing updates. Increasingly focused on digital dark patterns (2022+).</p>
+          </div>
+          <div class="detail-block">
+            <h4>How to use in Bad Company</h4>
+            <ul>
+              <li>Primary Tier 1 anchor for the Consumer Manipulation dimension</li>
+              <li>Each enforcement action = a scored negative event with a monetary weight</li>
+              <li>FTC complaints database also captures consumer-reported issues</li>
+              <li>Directly relevant to the "Don't Get Scammed" feature pillar</li>
+            </ul>
+          </div>
+          <div class="detail-block">
+            <h4>Access &amp; URL</h4>
+            <a href="https://www.ftc.gov/enforcement/cases-proceedings" target="_blank">ftc.gov/enforcement/cases-proceedings</a><br><br>
+            <p>Free public access. Structured data available. Good Jobs First's Violation Tracker already aggregates FTC data — consider using Violation Tracker as a single API rather than querying the FTC directly.</p>
+          </div>
+          <div class="detail-block">
+            <h4>Notes &amp; limitations</h4>
+            <p>US-only. Some cases take years to resolve. Captures cases brought by the FTC, not self-reported violations. The FTC has significantly expanded dark pattern enforcement since 2022, making this increasingly relevant for digital businesses.</p>
+          </div>
+        </div>
+        <div style="margin-top: 12px;">
+          <span class="use-tag">dark patterns</span><span class="use-tag">US enforcement</span><span class="use-tag">deceptive practices</span><span class="use-tag">fines</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="source-card">
+      <div class="card-header" onclick="toggle(this)">
+        <div class="card-accent" style="background: var(--consumer-dot)"></div>
+        <div class="card-main">
+          <div class="card-title-area">
+            <div class="card-name">CMA Case Database (UK)</div>
+            <div class="card-domain">gov.uk/government/organisations/competition-and-markets-authority</div>
+            <div class="card-tagline">UK Competition and Markets Authority investigations, rulings, and enforcement — the UK equivalent of the FTC</div>
+          </div>
+          <div class="card-meta">
+            <span class="access-badge access-free">Free</span>
+            <span class="tier-badge tier-1">Tier 1</span>
+            <span class="card-toggle">▾</span>
+          </div>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="detail-grid">
+          <div class="detail-block">
+            <h4>What it covers</h4>
+            <p>The CMA handles UK consumer protection, competition enforcement, and merger reviews. Case database includes enforcement actions for misleading pricing, fake reviews, subscription traps, and anti-competitive behaviour. Covers both consumer-facing and B2B sectors. Increasingly active on digital and tech since 2020.</p>
+          </div>
+          <div class="detail-block">
+            <h4>How to use in Bad Company</h4>
+            <ul>
+              <li>UK-specific companion to the FTC for consumer manipulation scoring</li>
+              <li>Directly relevant for a British user base — high credibility with UK users</li>
+              <li>CMA's green claims enforcement overlaps with the Environmental dimension</li>
+              <li>Use alongside Which? data for UK consumer credibility</li>
+            </ul>
+          </div>
+          <div class="detail-block">
+            <h4>Access &amp; URL</h4>
+            <a href="https://www.gov.uk/cma-cases" target="_blank">gov.uk/cma-cases</a><br><br>
+            <p>Free public access. Cases are searchable and filterable by sector, type, and status. Structured enough for programmatic extraction via URL patterns.</p>
+          </div>
+          <div class="detail-block">
+            <h4>Notes &amp; limitations</h4>
+            <p>UK-only. Volume of cases lower than the FTC — use alongside FTC, not as a replacement. The CMA has recently been active on digital platforms, fake reviews, and subscription traps, making it increasingly relevant for Bad Company's use cases.</p>
+          </div>
+        </div>
+        <div style="margin-top: 12px;">
+          <span class="use-tag">UK regulator</span><span class="use-tag">competition law</span><span class="use-tag">fake reviews</span><span class="use-tag">subscriptions</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="source-card">
+      <div class="card-header" onclick="toggle(this)">
+        <div class="card-accent" style="background: var(--consumer-dot)"></div>
+        <div class="card-main">
+          <div class="card-title-area">
+            <div class="card-name">Privacy International</div>
+            <div class="card-domain">privacyinternational.org</div>
+            <div class="card-tagline">Tracks corporate data exploitation, surveillance capitalism, and privacy abuses — with a corporate challenge programme</div>
+          </div>
+          <div class="card-meta">
+            <span class="access-badge access-free">Free</span>
+            <span class="tier-badge tier-2">Tier 2</span>
+            <span class="card-toggle">▾</span>
+          </div>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="detail-grid">
+          <div class="detail-block">
+            <h4>What it covers</h4>
+            <p>London-based NGO that researches and challenges corporate and state surveillance. Tracks data exploitation business models, GDPR enforcement, surveillance capitalism, and public-private surveillance partnerships. Has a formal "Challenging Corporate Data Exploitation" programme. Published findings on Android app data sharing with Facebook (61% of tested apps shared data on first open).</p>
+          </div>
+          <div class="detail-block">
+            <h4>How to use in Bad Company</h4>
+            <ul>
+              <li>Source for data exploitation and privacy abuse signals</li>
+              <li>Feeds the "Don't Get Scammed" and potentially "Buy Less Shit" pillars</li>
+              <li>Company-specific investigations available as qualitative input</li>
+              <li>Credible NGO source — defensible in Bad Score methodology</li>
+            </ul>
+          </div>
+          <div class="detail-block">
+            <h4>Access &amp; URL</h4>
+            <a href="https://privacyinternational.org/strategic-areas/challenging-corporate-data-exploitation" target="_blank">privacyinternational.org — Corporate Data Exploitation</a><br><br>
+            <p>All reports and research are free and openly published. No API — use web scraping or manual research for specific company investigations.</p>
+          </div>
+          <div class="detail-block">
+            <h4>Notes &amp; limitations</h4>
+            <p>Not a structured scoring database — qualitative research and campaign outputs. Better used as a signal source and credibility reference than a direct data feed. Best combined with GDPR enforcement data (ICO, DPC) for structured scoring.</p>
+          </div>
+        </div>
+        <div style="margin-top: 12px;">
+          <span class="use-tag">data exploitation</span><span class="use-tag">privacy</span><span class="use-tag">surveillance capitalism</span><span class="use-tag">GDPR</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="source-card">
+      <div class="card-header" onclick="toggle(this)">
+        <div class="card-accent" style="background: var(--consumer-dot)"></div>
+        <div class="card-main">
+          <div class="card-title-area">
+            <div class="card-name">Which? (UK)</div>
+            <div class="card-domain">which.co.uk</div>
+            <div class="card-tagline">Independent UK consumer research and testing — complaints tracking, scam investigations, and company accountability</div>
+          </div>
+          <div class="card-meta">
+            <span class="access-badge access-partial">Partial</span>
+            <span class="tier-badge tier-2">Tier 2</span>
+            <span class="card-toggle">▾</span>
+          </div>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="detail-grid">
+          <div class="detail-block">
+            <h4>What it covers</h4>
+            <p>Which? is the UK's largest consumer organisation. Runs independent testing of products and services, investigates corporate practices, tracks scams, and advocates for consumer rights. Has a history of exposing dark patterns, subscription traps, and misleading claims. Publishes open investigations and a "scam alert" database.</p>
+          </div>
+          <div class="detail-block">
+            <h4>How to use in Bad Company</h4>
+            <ul>
+              <li>Strong UK credibility — resonates with British users</li>
+              <li>Open investigations can flag consumer manipulation events</li>
+              <li>Scam alert database relevant to "Don't Get Scammed" pillar</li>
+              <li>Consider exploring a data partnership given mission alignment</li>
+            </ul>
+          </div>
+          <div class="detail-block">
+            <h4>Access &amp; URL</h4>
+            <a href="https://www.which.co.uk/news/article/which-scam-alert" target="_blank">which.co.uk/news (scam alerts)</a><br><br>
+            <p>Some content is free; product test data sits behind a subscription. Investigative journalism and scam alerts are free. A formal data partnership or content licensing agreement would unlock more value.</p>
+          </div>
+          <div class="detail-block">
+            <h4>Notes &amp; limitations</h4>
+            <p>UK-focused. Full product test database is behind a subscription paywall. Best used for UK-specific consumer signals and as a credibility reference. A data partnership with Which? would be a strong trust signal for Bad Company in the UK market.</p>
+          </div>
+        </div>
+        <div style="margin-top: 12px;">
+          <span class="use-tag">UK consumer</span><span class="use-tag">scam alerts</span><span class="use-tag">investigations</span><span class="use-tag">partnership potential</span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- GOVERNANCE -->
+  <div class="section-head" data-section="Governance">
+    <div class="section-dot" style="background: var(--gov-dot)"></div>
+    <h2>Governance &amp; Ethics</h2>
+    <span class="count">7 sources</span>
+  </div>
+  <div class="source-grid" id="Governance">
+
+    <div class="source-card">
+      <div class="card-header" onclick="toggle(this)">
+        <div class="card-accent" style="background: var(--gov-dot)"></div>
+        <div class="card-main">
+          <div class="card-title-area">
+            <div class="card-name">Good Jobs First — Violation Tracker</div>
+            <div class="card-domain">violationtracker.goodjobsfirst.org</div>
+            <div class="card-tagline">700,000+ civil and criminal corporate penalties from 450+ US agencies since 2000 — total penalties exceed $1 trillion</div>
+          </div>
+          <div class="card-meta">
+            <span class="access-badge access-free">Free</span>
+            <span class="tier-badge tier-1">Tier 1</span>
+            <span class="card-toggle">▾</span>
+          </div>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="detail-grid">
+          <div class="detail-block">
+            <h4>What it covers</h4>
+            <p>The most comprehensive US corporate misconduct database. Covers banking, consumer protection, environmental, wage and hour, safety, discrimination, price-fixing, and bribery cases from 450+ federal and state agencies. Over 700,000 cases with $1 trillion+ in total penalties. Includes class action lawsuits. Covers parent companies across Fortune 1000, S&amp;P 500, and more. A Global version exists for international companies in 75+ countries.</p>
+          </div>
+          <div class="detail-block">
+            <h4>How to use in Bad Company</h4>
+            <ul>
+              <li>Cross-dimensional anchor: feeds Labour, Environmental, Consumer, and Governance scores</li>
+              <li>Penalty amount gives a financial weighting to misconduct severity</li>
+              <li>Historical trajectory data supports the trajectory scoring model</li>
+              <li>Global version provides international coverage</li>
+              <li>Use Violation Tracker UK for British company scoring</li>
+            </ul>
+          </div>
+          <div class="detail-block">
+            <h4>Access &amp; URL</h4>
+            <a href="https://violationtracker.goodjobsfirst.org" target="_blank">violationtracker.goodjobsfirst.org</a><br><br>
+            <a href="https://violationtrackerglobal.goodjobsfirst.org" target="_blank">violationtrackerglobal.goodjobsfirst.org</a><br><br>
+            <a href="https://goodjobsfirst.org/databases/" target="_blank">goodjobsfirst.org/databases (all tools)</a><br><br>
+            <p>Free public access. Searchable by company, agency, violation type, penalty size. No formal API, but well-structured for scraping. Data is regularly updated.</p>
+          </div>
+          <div class="detail-block">
+            <h4>Notes &amp; limitations</h4>
+            <p>Only covers resolved cases — not pending investigations. US-centric though Global version expands this. Parent company matching may not always catch subsidiaries. Excludes penalties below $5,000. Strongest Tier 1 source for cross-dimensional misconduct data.</p>
+          </div>
+        </div>
+        <div style="margin-top: 12px;">
+          <span class="use-tag">penalties</span><span class="use-tag">misconduct</span><span class="use-tag">cross-dimensional</span><span class="use-tag">700k cases</span><span class="use-tag">global version</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="source-card">
+      <div class="card-header" onclick="toggle(this)">
+        <div class="card-accent" style="background: var(--gov-dot)"></div>
+        <div class="card-main">
+          <div class="card-title-area">
+            <div class="card-name">OpenSecrets</div>
+            <div class="card-domain">opensecrets.org</div>
+            <div class="card-tagline">US political donation and lobbying data since 1990 — searchable by company, industry, and politician; bulk data download available</div>
+          </div>
+          <div class="card-meta">
+            <span class="access-badge access-free">Free</span>
+            <span class="tier-badge tier-1">Tier 1</span>
+            <span class="card-toggle">▾</span>
+          </div>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="detail-grid">
+          <div class="detail-block">
+            <h4>What it covers</h4>
+            <p>The premier US money-in-politics database. Tracks campaign contributions, lobbying expenditures, PAC activity, foreign lobbying, dark money, and revolving door data from 1990 to present. Covers thousands of corporations, trade associations, and industry groups. Bulk data downloadable in CSV format under Creative Commons licence. Data sourced directly from FEC and Senate Office of Public Records.</p>
+          </div>
+          <div class="detail-block">
+            <h4>How to use in Bad Company</h4>
+            <ul>
+              <li>Powers the "Political Donation Tracker" feature directly</li>
+              <li>Feeds the Governance and "Bad Government" pillars</li>
+              <li>Lobbying spend data reveals regulatory capture risk</li>
+              <li>Revolving door data shows former regulators on company payrolls</li>
+              <li>Bulk download available — integrate via CSV into the scoring engine</li>
+            </ul>
+          </div>
+          <div class="detail-block">
+            <h4>Access &amp; URL</h4>
+            <a href="https://www.opensecrets.org/orgs/search" target="_blank">opensecrets.org/orgs/search (company lookup)</a><br><br>
+            <a href="https://www.opensecrets.org/open-data/bulk-data" target="_blank">opensecrets.org/open-data/bulk-data (CSV downloads)</a><br><br>
+            <p>Free public access. Bulk data available under Creative Commons (non-commercial). API access available for research partners. Consider applying for an API key for programmatic access.</p>
+          </div>
+          <div class="detail-block">
+            <h4>Notes &amp; limitations</h4>
+            <p>US-only. Organisation experienced financial difficulties in 2024 and reduced staff — verify ongoing data quality. For UK equivalent, use the Electoral Commission's register of donations and Hansard Society lobbying data. InfluenceMap covers EU lobbying.</p>
+          </div>
+        </div>
+        <div style="margin-top: 12px;">
+          <span class="use-tag">political donations</span><span class="use-tag">lobbying</span><span class="use-tag">dark money</span><span class="use-tag">bulk download</span><span class="use-tag">revolving door</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="source-card">
+      <div class="card-header" onclick="toggle(this)">
+        <div class="card-accent" style="background: var(--gov-dot)"></div>
+        <div class="card-main">
+          <div class="card-title-area">
+            <div class="card-name">Transparency International</div>
+            <div class="card-domain">transparency.org</div>
+            <div class="card-tagline">Global corruption perceptions — CPI by country, corporate bribery risk assessments, and anti-corruption enforcement data</div>
+          </div>
+          <div class="card-meta">
+            <span class="access-badge access-free">Free</span>
+            <span class="tier-badge tier-2">Tier 2</span>
+            <span class="card-toggle">▾</span>
+          </div>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="detail-grid">
+          <div class="detail-block">
+            <h4>What it covers</h4>
+            <p>TI produces the Corruption Perceptions Index (CPI) for 180 countries, anti-corruption enforcement reports, and research on corporate bribery and procurement fraud. The Bribe Payers Index assesses the likelihood that companies from particular countries engage in foreign bribery. Also tracks enforcement of the OECD Anti-Bribery Convention.</p>
+          </div>
+          <div class="detail-block">
+            <h4>How to use in Bad Company</h4>
+            <ul>
+              <li>Country risk overlay for supply chain and operational scoring</li>
+              <li>Anti-bribery enforcement data feeds the Governance dimension</li>
+              <li>Use CPI as a contextual layer, not a direct company score</li>
+              <li>Relevant for the "Bad Government" pillar</li>
+            </ul>
+          </div>
+          <div class="detail-block">
+            <h4>Access &amp; URL</h4>
+            <a href="https://www.transparency.org/en/cpi" target="_blank">transparency.org/en/cpi</a><br><br>
+            <p>Free public access. CPI data downloadable in Excel and CSV. Company-specific data is less structured than country-level data — supplement with OCCRP for specific corporate corruption cases.</p>
+          </div>
+          <div class="detail-block">
+            <h4>Notes &amp; limitations</h4>
+            <p>Strongest at country level, weaker for individual company scoring. Best used as a risk context layer rather than a direct input. Combine with OCCRP and Good Jobs First for company-specific corruption evidence.</p>
+          </div>
+        </div>
+        <div style="margin-top: 12px;">
+          <span class="use-tag">corruption</span><span class="use-tag">country risk</span><span class="use-tag">bribery</span><span class="use-tag">governance</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="source-card">
+      <div class="card-header" onclick="toggle(this)">
+        <div class="card-accent" style="background: var(--gov-dot)"></div>
+        <div class="card-main">
+          <div class="card-title-area">
+            <div class="card-name">OCCRP (Organised Crime and Corruption Reporting Project)</div>
+            <div class="card-domain">occrp.org</div>
+            <div class="card-tagline">Investigative journalism database covering corporate fraud, corruption, and financial crime — global reach, free access</div>
+          </div>
+          <div class="card-meta">
+            <span class="access-badge access-free">Free</span>
+            <span class="tier-badge tier-2">Tier 2</span>
+            <span class="card-toggle">▾</span>
+          </div>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="detail-grid">
+          <div class="detail-block">
+            <h4>What it covers</h4>
+            <p>OCCRP is the world's largest investigative journalism network, with reporters in 45 countries. Covers corporate fraud, money laundering, kleptocracy, financial crime, and organised crime links to business. Maintains a searchable Person of Interest database and has broken major investigations including the Panama Papers, FinCEN Files, and Pandora Papers.</p>
+          </div>
+          <div class="detail-block">
+            <h4>How to use in Bad Company</h4>
+            <ul>
+              <li>Corporate fraud and serious financial crime signals for Governance dimension</li>
+              <li>Person of Interest database for executive-level red flags</li>
+              <li>Use as a qualitative evidence source for extreme governance failures</li>
+              <li>Credible, legally robust source — journalism that has withstood legal challenge</li>
+            </ul>
+          </div>
+          <div class="detail-block">
+            <h4>Access &amp; URL</h4>
+            <a href="https://www.occrp.org/en" target="_blank">occrp.org</a><br><br>
+            <a href="https://data.occrp.org" target="_blank">data.occrp.org (OCCRP Data)</a><br><br>
+            <p>Free public access to all published investigations. OCCRP Data portal provides structured access to leaked documents and company data from major investigations. Consider reaching out for a data partnership.</p>
+          </div>
+          <div class="detail-block">
+            <h4>Notes &amp; limitations</h4>
+            <p>Not a structured scoring database — qualitative inputs only. Coverage is investigative, so limited to companies that have been subjects of reporting. Best used as a high-severity signal source that can override quantitative scores when serious fraud is evidenced.</p>
+          </div>
+        </div>
+        <div style="margin-top: 12px;">
+          <span class="use-tag">financial crime</span><span class="use-tag">investigative journalism</span><span class="use-tag">Panama Papers</span><span class="use-tag">corruption</span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- CROSS-DIMENSIONAL -->
+  <div class="section-head" data-section="Cross">
+    <div class="section-dot" style="background: var(--cross-dot)"></div>
+    <h2>Cross-Dimensional &amp; Aggregators</h2>
+    <span class="count">5 sources</span>
+  </div>
+  <div class="source-grid" id="Cross">
+
+    <div class="source-card">
+      <div class="card-header" onclick="toggle(this)">
+        <div class="card-accent" style="background: var(--cross-dot)"></div>
+        <div class="card-main">
+          <div class="card-title-area">
+            <div class="card-name">RepRisk</div>
+            <div class="card-domain">reprisk.com</div>
+            <div class="card-tagline">Real-time ESG risk intelligence across 130,000+ companies — media and NGO monitoring, updated daily</div>
+          </div>
+          <div class="card-meta">
+            <span class="access-badge access-paid">Paid</span>
+            <span class="tier-badge tier-1">Tier 1</span>
+            <span class="card-toggle">▾</span>
+          </div>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="detail-grid">
+          <div class="detail-block">
+            <h4>What it covers</h4>
+            <p>RepRisk monitors news, social media, and NGO sources in 20 languages daily to flag ESG risk events for 130,000+ companies. Generates a RepRisk Index (RRI) score that tracks controversy frequency and severity. Covers all ESG dimensions. Used by institutional investors and banks for due diligence. Widest company universe of any ESG intelligence source.</p>
+          </div>
+          <div class="detail-block">
+            <h4>How to use in Bad Company</h4>
+            <ul>
+              <li>Broadest company coverage available — extends beyond benchmark universe</li>
+              <li>Real-time signals enable the Bad Score to update dynamically</li>
+              <li>If a data partnership is achievable, this is transformational for the product</li>
+              <li>Raise with Upendra — may be achievable via Rain Ventures relationships</li>
+            </ul>
+          </div>
+          <div class="detail-block">
+            <h4>Access &amp; URL</h4>
+            <a href="https://www.reprisk.com" target="_blank">reprisk.com</a><br><br>
+            <p>Commercial product — institutional pricing. Not accessible for free. Explore a startup/NGO data partnership or academic access. Alternative: build a similar real-time monitoring function using BHRRC API + Violation Tracker + news APIs.</p>
+          </div>
+          <div class="detail-block">
+            <h4>Notes &amp; limitations</h4>
+            <p>Significant cost. Consider whether a DIY real-time monitoring stack (BHRRC + Violation Tracker + Google News API) replicates enough of the value at near-zero cost. RepRisk is aspirational Tier 1 — prioritise free sources first.</p>
+          </div>
+        </div>
+        <div style="margin-top: 12px;">
+          <span class="use-tag">real-time</span><span class="use-tag">130k companies</span><span class="use-tag">ESG risk</span><span class="use-tag">paid</span><span class="use-tag">aspiration</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="source-card">
+      <div class="card-header" onclick="toggle(this)">
+        <div class="card-accent" style="background: var(--cross-dot)"></div>
+        <div class="card-main">
+          <div class="card-title-area">
+            <div class="card-name">B Lab / B Corp Directory</div>
+            <div class="card-domain">bcorporation.net</div>
+            <div class="card-tagline">Third-party certified scores across governance, workers, community, environment, and customers — 8,000+ certified companies</div>
+          </div>
+          <div class="card-meta">
+            <span class="access-badge access-free">Free</span>
+            <span class="tier-badge tier-2">Tier 2</span>
+            <span class="card-toggle">▾</span>
+          </div>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="detail-grid">
+          <div class="detail-block">
+            <h4>What it covers</h4>
+            <p>B Lab certifies companies as B Corporations after a rigorous impact assessment covering governance, workers, community, environment, and customers (scored 0–200; minimum 80 required). Over 8,000 certified companies globally. Scores are publicly accessible on the B Corp directory. Certification requires re-assessment every three years.</p>
+          </div>
+          <div class="detail-block">
+            <h4>How to use in Bad Company</h4>
+            <ul>
+              <li>Positive signal — B Corp certification is a strong upward score modifier</li>
+              <li>Use to power the "Shop Your Values" feature pillar</li>
+              <li>Sector-specific scores allow nuanced positive scoring</li>
+              <li>Trajectory: companies that lose certification are significant negative signals</li>
+            </ul>
+          </div>
+          <div class="detail-block">
+            <h4>Access &amp; URL</h4>
+            <a href="https://www.bcorporation.net/en-us/find-a-b-corp/" target="_blank">bcorporation.net/en-us/find-a-b-corp</a><br><br>
+            <p>Free public access to the B Corp directory and individual company scores. Data accessible via the directory search. No formal API but data is structured and scrapeable.</p>
+          </div>
+          <div class="detail-block">
+            <h4>Notes &amp; limitations</h4>
+            <p>Covers only companies that have sought certification — not a broad company universe. Covers ~8,000 companies, weighted towards SMEs. Useful as a positive differentiation signal rather than a baseline scoring input. Some high-profile companies (e.g. Ben &amp; Jerry's, Patagonia) are well known B Corps — high consumer recognition.</p>
+          </div>
+        </div>
+        <div style="margin-top: 12px;">
+          <span class="use-tag">positive signal</span><span class="use-tag">certification</span><span class="use-tag">shop your values</span><span class="use-tag">8000 companies</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="source-card">
+      <div class="card-header" onclick="toggle(this)">
+        <div class="card-accent" style="background: var(--cross-dot)"></div>
+        <div class="card-main">
+          <div class="card-title-area">
+            <div class="card-name">SEC EDGAR</div>
+            <div class="card-domain">sec.gov/cgi-bin/browse-edgar</div>
+            <div class="card-tagline">US public company filings — litigation, settlements, risk disclosures, and executive pay in standardised format with free API</div>
+          </div>
+          <div class="card-meta">
+            <span class="access-badge access-api">API</span>
+            <span class="tier-badge tier-1">Tier 1</span>
+            <span class="card-toggle">▾</span>
+          </div>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="detail-grid">
+          <div class="detail-block">
+            <h4>What it covers</h4>
+            <p>All US public company filings including 10-K annual reports (risk disclosures, litigation, executive pay), 8-K material event filings (settlements, investigations), proxy statements (governance, shareholder resolutions), and DEF 14A filings (executive compensation). Highly structured and machine-readable. Free REST API available.</p>
+          </div>
+          <div class="detail-block">
+            <h4>How to use in Bad Company</h4>
+            <ul>
+              <li>Self-reported litigation and legal risk directly from the company</li>
+              <li>Executive pay ratios from proxy statements feed the Labour dimension</li>
+              <li>8-K filings capture material governance events in real time</li>
+              <li>Risk disclosure language analysis is a strong AI task for the model</li>
+            </ul>
+          </div>
+          <div class="detail-block">
+            <h4>Access &amp; URL</h4>
+            <a href="https://efts.sec.gov/LATEST/search-index?q=%22company%22&dateRange=custom&startdt=2024-01-01&enddt=2025-01-01&forms=10-K" target="_blank">EDGAR full-text search</a><br><br>
+            <a href="https://data.sec.gov" target="_blank">data.sec.gov (REST API)</a><br><br>
+            <p>Fully free REST API with no authentication required. Returns structured JSON. Connor should build an EDGAR connector early — it is a primary source for US-listed companies with no cost.</p>
+          </div>
+          <div class="detail-block">
+            <h4>Notes &amp; limitations</h4>
+            <p>US public companies only. Private companies (Amazon pre-IPO, etc.) not covered once delisted. Self-reported — companies are incentivised to minimise disclosed risks. Requires NLP to extract relevant content from long documents. The most technically rich free source available.</p>
+          </div>
+        </div>
+        <div style="margin-top: 12px;">
+          <span class="use-tag">SEC filings</span><span class="use-tag">free API</span><span class="use-tag">litigation</span><span class="use-tag">executive pay</span><span class="use-tag">NLP opportunity</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="source-card">
+      <div class="card-header" onclick="toggle(this)">
+        <div class="card-accent" style="background: var(--cross-dot)"></div>
+        <div class="card-main">
+          <div class="card-title-area">
+            <div class="card-name">Global Reporting Initiative (GRI)</div>
+            <div class="card-domain">globalreporting.org</div>
+            <div class="card-tagline">The world's most adopted sustainability reporting standard — used by 10,000+ companies; GRI database tracks disclosures</div>
+          </div>
+          <div class="card-meta">
+            <span class="access-badge access-free">Free</span>
+            <span class="tier-badge tier-2">Tier 2</span>
+            <span class="card-toggle">▾</span>
+          </div>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="detail-grid">
+          <div class="detail-block">
+            <h4>What it covers</h4>
+            <p>GRI is the most widely used framework for corporate sustainability reporting. The GRI Sustainability Disclosure Database tracks companies that have published GRI-aligned reports, covering environment, social, and governance disclosures. Over 10,000 companies use GRI standards. Absence of GRI reporting is itself a disclosure signal.</p>
+          </div>
+          <div class="detail-block">
+            <h4>How to use in Bad Company</h4>
+            <ul>
+              <li>Disclosure quality as a governance signal — companies that report vs. those that do not</li>
+              <li>Use GRI data as a consistency check against CDP and WBA data</li>
+              <li>Framework reference: aligning Bad Company's scoring criteria with GRI standards adds credibility</li>
+            </ul>
+          </div>
+          <div class="detail-block">
+            <h4>Access &amp; URL</h4>
+            <a href="https://www.globalreporting.org/services/support/companies-reporting/" target="_blank">globalreporting.org — company reporting database</a><br><br>
+            <p>Free access to the GRI database of disclosing companies. Full report content sits on company websites, not on GRI's servers directly. Use as a disclosure index rather than a data source per se.</p>
+          </div>
+          <div class="detail-block">
+            <h4>Notes &amp; limitations</h4>
+            <p>Framework, not a data aggregator. Does not score companies directly. Best used as a disclosure completeness signal and as a methodology reference for Bad Company's own scoring criteria. Lower priority than direct data sources.</p>
+          </div>
+        </div>
+        <div style="margin-top: 12px;">
+          <span class="use-tag">disclosure standard</span><span class="use-tag">reporting framework</span><span class="use-tag">methodology reference</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="source-card">
+      <div class="card-header" onclick="toggle(this)">
+        <div class="card-accent" style="background: var(--cross-dot)"></div>
+        <div class="card-main">
+          <div class="card-title-area">
+            <div class="card-name">Wikirate</div>
+            <div class="card-domain">wikirate.org</div>
+            <div class="card-tagline">Open ESG data platform aggregating metrics from KnowTheChain, Violation Tracker, WBA, and others — free API</div>
+          </div>
+          <div class="card-meta">
+            <span class="access-badge access-api">API</span>
+            <span class="tier-badge tier-2">Tier 2</span>
+            <span class="card-toggle">▾</span>
+          </div>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="detail-grid">
+          <div class="detail-block">
+            <h4>What it covers</h4>
+            <p>Wikirate is an open-data platform that aggregates ESG metrics from multiple sources including KnowTheChain, Violation Tracker (Good Jobs First), World Benchmarking Alliance, and others. Acts as a normalised data layer across multiple sources. Free REST API returns structured JSON. Community-driven with NGO and academic contributors.</p>
+          </div>
+          <div class="detail-block">
+            <h4>How to use in Bad Company</h4>
+            <ul>
+              <li>Single API to query metrics across multiple source databases</li>
+              <li>Reduces the number of direct source integrations needed in V3</li>
+              <li>Check which of Bad Company's priority sources are already on Wikirate</li>
+              <li>Connor should evaluate Wikirate as a data aggregation layer before building individual scrapers</li>
+            </ul>
+          </div>
+          <div class="detail-block">
+            <h4>Access &amp; URL</h4>
+            <a href="https://wikirate.org" target="_blank">wikirate.org</a><br><br>
+            <a href="https://wikirate.org/API" target="_blank">wikirate.org/API (free REST API)</a><br><br>
+            <p>Free public access and free API. No authentication required for read access. Returns data in JSON format. Well-documented. This should be Connor's first port of call for a multi-source data integration approach.</p>
+          </div>
+          <div class="detail-block">
+            <h4>Notes &amp; limitations</h4>
+            <p>Coverage depends on what NGOs have contributed. Not all companies are covered for all metrics. Acts as a convenience layer, not a replacement for primary sources. Excellent starting point for the V3 data architecture conversation with Connor.</p>
+          </div>
+        </div>
+        <div style="margin-top: 12px;">
+          <span class="use-tag">aggregator</span><span class="use-tag">free API</span><span class="use-tag">multi-source</span><span class="use-tag">open data</span><span class="use-tag">recommend to Connor</span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <footer>
+    <span>Bad Company — Internal Research Document</span>
+    <span>Compiled April 2026 · Rain Ventures / Bad Company Project</span>
+    <span>All URLs verified April 2026</span>
+  </footer>
+
+</div>
+
+<script>
+  function toggle(header) {
+    const body = header.parentElement.querySelector('.card-body');
+    const icon = header.querySelector('.card-toggle');
+    body.classList.toggle('open');
+    icon.classList.toggle('open');
+  }
+
+  document.querySelectorAll('.filter-btn').forEach(btn => {
+    btn.addEventListener('click', function() {
+      document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+      this.classList.add('active');
+      const cat = this.dataset.cat;
+      if (cat === 'All') {
+        document.querySelectorAll('.section-head, .source-grid').forEach(el => el.style.display = '');
+      } else {
+        document.querySelectorAll('.section-head').forEach(sh => {
+          const show = sh.dataset.section === cat;
+          sh.style.display = show ? '' : 'none';
+          const grid = document.getElementById(sh.dataset.section);
+          if (grid) grid.style.display = show ? '' : 'none';
+        });
+      }
+    });
+  });
+</script>
+</body>
+</html>
