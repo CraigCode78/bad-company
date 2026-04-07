@@ -1,0 +1,1449 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bad Company — Data Strategy</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --red: #C8392B;
+    --red-light: #FBE9E7;
+    --red-mid: #E57368;
+    --ink: #1A1A1A;
+    --ink-2: #444;
+    --ink-3: #777;
+    --surface: #FAFAF8;
+    --border: #E5E2DA;
+    --border-strong: #CCC9C0;
+    --bg: #F5F3EE;
+
+    --labour: #1A4A8A;
+    --labour-bg: #E8EEF6;
+    --labour-dot: #3A6AAA;
+    --env: #1A6640;
+    --env-bg: #E6F2EC;
+    --env-dot: #2A8855;
+    --consumer: #8A4A00;
+    --consumer-bg: #FFF3E0;
+    --consumer-dot: #B06A10;
+    --gov: #5A1A7A;
+    --gov-bg: #F0E6F6;
+    --gov-dot: #7A3A9A;
+    --cross: #4A3A2A;
+    --cross-bg: #F0ECE6;
+    --cross-dot: #6A5A4A;
+
+    --political: #1A4A8A;
+    --political-bg: #E8EEF6;
+    --regulatory: #5A1A7A;
+    --regulatory-bg: #F0E6F6;
+    --legal: #4A3A2A;
+    --legal-bg: #F0ECE6;
+    --safety: #C8392B;
+    --safety-bg: #FBE9E7;
+    --food: #1A6640;
+    --food-bg: #E6F2EC;
+    --site: #444;
+    --site-bg: #F0F0EE;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--ink);
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    font-size: 15px;
+    line-height: 1.7;
+    min-height: 100vh;
+    padding: 48px 24px 96px;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .container { max-width: 960px; margin: 0 auto; }
+
+  /* ── Header ── */
+  header {
+    margin-bottom: 48px;
+    padding-bottom: 36px;
+    border-bottom: 2px solid var(--border);
+  }
+
+  .subtitle {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    color: var(--ink-3);
+    text-transform: uppercase;
+    margin-bottom: 10px;
+  }
+
+  h1 {
+    font-family: 'Fraunces', serif;
+    font-size: 38px;
+    font-weight: 700;
+    line-height: 1.15;
+    color: var(--ink);
+    margin-bottom: 6px;
+    letter-spacing: -0.01em;
+  }
+
+  h1 .bad { color: var(--red); }
+
+  .header-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px 24px;
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+    color: var(--ink-3);
+    margin-top: 12px;
+  }
+
+  .header-meta span { white-space: nowrap; }
+
+  .contributors {
+    margin-top: 14px;
+    font-size: 13px;
+    color: var(--ink-3);
+    line-height: 1.6;
+  }
+
+  /* ── Section headings ── */
+  h2 {
+    font-family: 'Fraunces', serif;
+    font-size: 26px;
+    font-weight: 600;
+    color: var(--ink);
+    margin: 56px 0 20px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--border);
+    letter-spacing: -0.01em;
+  }
+
+  h3 {
+    font-family: 'Fraunces', serif;
+    font-size: 20px;
+    font-weight: 600;
+    color: var(--ink);
+    margin: 0;
+  }
+
+  /* ── Guiding principles ── */
+  .principles {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 28px 32px;
+    margin: 20px 0 32px;
+  }
+
+  .principles .lead {
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--ink);
+    margin-bottom: 16px;
+    line-height: 1.5;
+  }
+
+  .principles ol {
+    margin: 0;
+    padding-left: 20px;
+    color: var(--ink-2);
+  }
+
+  .principles ol li {
+    margin-bottom: 6px;
+  }
+
+  .principles .note {
+    margin-top: 16px;
+    font-size: 14px;
+    color: var(--ink-3);
+    font-style: italic;
+  }
+
+  /* ── Tables ── */
+  .table-wrap {
+    overflow-x: auto;
+    margin: 20px 0 32px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background: var(--surface);
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+  }
+
+  thead th {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--ink-3);
+    background: var(--bg);
+    padding: 10px 16px;
+    text-align: left;
+    border-bottom: 1px solid var(--border);
+    white-space: nowrap;
+  }
+
+  tbody td {
+    font-family: 'DM Mono', monospace;
+    font-size: 13px;
+    padding: 10px 16px;
+    border-bottom: 1px solid var(--border);
+    color: var(--ink-2);
+    vertical-align: top;
+  }
+
+  tbody tr:last-child td { border-bottom: none; }
+
+  tbody td strong {
+    font-family: 'Inter', sans-serif;
+    font-weight: 600;
+    color: var(--ink);
+  }
+
+  tbody td:first-child {
+    font-family: 'Inter', sans-serif;
+    font-weight: 500;
+    color: var(--ink);
+  }
+
+  /* ── Dead sources table ── */
+  .table-dead {
+    border-color: var(--red-mid);
+  }
+
+  .table-dead thead th {
+    background: var(--red-light);
+    color: var(--red);
+    border-bottom-color: var(--red-mid);
+  }
+
+  .table-dead tbody td {
+    border-bottom-color: #F5D0CB;
+  }
+
+  .dead-label {
+    display: inline-block;
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    background: var(--red-light);
+    color: var(--red);
+    padding: 2px 8px;
+    border-radius: 4px;
+    border: 1px solid var(--red-mid);
+    margin-bottom: 12px;
+  }
+
+  /* ── Scoring framework table ── */
+  .table-scoring tbody td:first-child {
+    font-family: 'Inter', sans-serif;
+    font-weight: 600;
+    color: var(--ink);
+    white-space: nowrap;
+  }
+
+  .table-scoring tbody td:last-child {
+    font-family: 'DM Mono', monospace;
+    font-size: 13px;
+    color: var(--ink-3);
+    white-space: nowrap;
+  }
+
+  /* ── Source cards ── */
+  .source-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    margin: 20px 0;
+    overflow: hidden;
+    border-left: 4px solid var(--cross);
+  }
+
+  .source-card.cat-consumer { border-left-color: var(--consumer); }
+  .source-card.cat-env { border-left-color: var(--env); }
+  .source-card.cat-labour { border-left-color: var(--labour); }
+  .source-card.cat-gov { border-left-color: var(--gov); }
+  .source-card.cat-cross { border-left-color: var(--cross); }
+  .source-card.cat-political { border-left-color: var(--political); }
+  .source-card.cat-regulatory { border-left-color: var(--regulatory); }
+  .source-card.cat-legal { border-left-color: var(--legal); }
+  .source-card.cat-safety { border-left-color: var(--safety); }
+  .source-card.cat-food { border-left-color: var(--food); }
+  .source-card.cat-site { border-left-color: var(--site); }
+
+  .source-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 20px 24px 0;
+    flex-wrap: wrap;
+  }
+
+  .score-badge {
+    font-family: 'DM Mono', monospace;
+    font-size: 14px;
+    font-weight: 500;
+    padding: 4px 14px;
+    border-radius: 20px;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+
+  .score-high {
+    background: var(--env-bg);
+    color: var(--env);
+    border: 1px solid #B0D8C4;
+  }
+
+  .score-top {
+    background: #FFF8E1;
+    color: #7A5A00;
+    border: 1px solid #E8D080;
+  }
+
+  .score-mid {
+    background: var(--consumer-bg);
+    color: var(--consumer);
+    border: 1px solid #E8D0A0;
+  }
+
+  .source-body {
+    padding: 16px 24px 24px;
+  }
+
+  .source-meta {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 6px 16px;
+    font-size: 14px;
+    margin-top: 12px;
+  }
+
+  .source-meta dt {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--ink-3);
+    padding-top: 2px;
+  }
+
+  .source-meta dd {
+    color: var(--ink-2);
+    line-height: 1.6;
+  }
+
+  .source-meta dd a {
+    color: var(--red);
+    text-decoration: none;
+    font-family: 'DM Mono', monospace;
+    font-size: 13px;
+    word-break: break-all;
+  }
+
+  .source-meta dd a:hover { text-decoration: underline; }
+
+  .source-use {
+    margin-top: 14px;
+    padding: 12px 16px;
+    background: var(--bg);
+    border-radius: 6px;
+    font-size: 14px;
+    color: var(--ink-2);
+    line-height: 1.65;
+  }
+
+  .source-use strong {
+    color: var(--ink);
+  }
+
+  .source-note {
+    margin-top: 10px;
+    font-size: 13px;
+    color: var(--ink-3);
+    font-style: italic;
+    padding-left: 16px;
+    border-left: 2px solid var(--border);
+  }
+
+  .source-highlight {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--ink-3);
+    margin-top: 4px;
+  }
+
+  /* ── Category tag ── */
+  .cat-tag {
+    display: inline-block;
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    padding: 2px 8px;
+    border-radius: 4px;
+  }
+
+  .cat-tag.consumer { background: var(--consumer-bg); color: var(--consumer); }
+  .cat-tag.env { background: var(--env-bg); color: var(--env); }
+  .cat-tag.labour { background: var(--labour-bg); color: var(--labour); }
+  .cat-tag.gov { background: var(--gov-bg); color: var(--gov); }
+  .cat-tag.cross { background: var(--cross-bg); color: var(--cross); }
+  .cat-tag.political { background: var(--political-bg); color: var(--political); }
+  .cat-tag.regulatory { background: var(--regulatory-bg); color: var(--regulatory); }
+  .cat-tag.legal { background: var(--legal-bg); color: var(--legal); }
+  .cat-tag.safety { background: var(--safety-bg); color: var(--safety); }
+  .cat-tag.food { background: var(--food-bg); color: var(--food); }
+  .cat-tag.site { background: var(--site-bg); color: var(--site); }
+
+  /* ── Features pills ── */
+  .features-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+    margin-top: 2px;
+  }
+
+  .feature-pill {
+    display: inline-block;
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: var(--ink-3);
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 1px 7px;
+  }
+
+  /* ── Open Questions ── */
+  .questions {
+    background: var(--surface);
+    border: 1px solid var(--border-strong);
+    border-radius: 8px;
+    padding: 28px 32px;
+    margin: 20px 0 32px;
+    border-left: 4px solid var(--red);
+  }
+
+  .question-item {
+    margin-bottom: 20px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .question-item:last-child {
+    margin-bottom: 0;
+    padding-bottom: 0;
+    border-bottom: none;
+  }
+
+  .question-num {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--red);
+    margin-bottom: 4px;
+  }
+
+  .question-title {
+    font-family: 'Fraunces', serif;
+    font-size: 17px;
+    font-weight: 600;
+    color: var(--ink);
+    margin-bottom: 6px;
+  }
+
+  .question-body {
+    font-size: 14px;
+    color: var(--ink-2);
+    line-height: 1.65;
+  }
+
+  /* ── Infrastructure ── */
+  .infra-box {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 24px 28px;
+    margin: 20px 0 32px;
+    border-left: 4px solid var(--cross);
+  }
+
+  .infra-box p {
+    margin-bottom: 12px;
+    color: var(--ink-2);
+    line-height: 1.65;
+  }
+
+  .infra-box p:last-child { margin-bottom: 0; }
+
+  .infra-box .callout {
+    background: var(--consumer-bg);
+    border: 1px solid #E8D0A0;
+    border-radius: 6px;
+    padding: 12px 16px;
+    margin-top: 16px;
+    font-size: 14px;
+    color: var(--consumer);
+    font-weight: 500;
+  }
+
+  /* ── Tier intro ── */
+  .tier-intro {
+    font-size: 15px;
+    color: var(--ink-2);
+    margin-bottom: 8px;
+  }
+
+  /* ── Scoring max note ── */
+  .scoring-note {
+    font-family: 'DM Mono', monospace;
+    font-size: 13px;
+    color: var(--ink-3);
+    margin-top: 12px;
+    padding: 10px 16px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+  }
+
+  /* ── Version history ── */
+  .version-table tbody td:first-child {
+    font-family: 'DM Mono', monospace;
+    font-weight: 500;
+    white-space: nowrap;
+  }
+
+  /* ── Footer ── */
+  .footer {
+    margin-top: 64px;
+    padding-top: 24px;
+    border-top: 1px solid var(--border);
+    font-size: 13px;
+    color: var(--ink-3);
+    font-style: italic;
+    text-align: center;
+  }
+
+  /* ── Responsive ── */
+  @media (max-width: 640px) {
+    h1 { font-size: 28px; }
+    h2 { font-size: 22px; }
+    .source-header { padding: 16px 16px 0; }
+    .source-body { padding: 12px 16px 20px; }
+    .source-meta { grid-template-columns: 1fr; gap: 2px 0; }
+    .source-meta dt { margin-top: 8px; }
+    .principles, .questions { padding: 20px; }
+    .header-meta { flex-direction: column; gap: 4px; }
+    body { padding: 24px 16px 64px; }
+  }
+
+  /* ── Tier 2/3 table enhancements ── */
+  .table-tier tbody td:nth-child(2) {
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+    font-weight: 500;
+    white-space: nowrap;
+  }
+
+  .table-tier a {
+    color: var(--red);
+    text-decoration: none;
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+  }
+
+  .table-tier a:hover { text-decoration: underline; }
+
+  /* ── Tier 3 cost column ── */
+  .table-tier3 tbody td:nth-child(3) {
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+    color: var(--red);
+    white-space: nowrap;
+  }
+</style>
+</head>
+<body>
+
+<div class="container">
+
+  <!-- ════ HEADER ════ -->
+  <header>
+    <div class="subtitle">Data Strategy &mdash; V2.0</div>
+    <h1><span class="bad">Bad</span> Company</h1>
+    <div class="header-meta">
+      <span>Version 2.0</span>
+      <span>April 2026</span>
+      <span>Status: For team discussion</span>
+    </div>
+    <div class="header-meta" style="margin-top:4px;">
+      <span>Supersedes: DATA_SOURCES.md v1.0</span>
+    </div>
+    <div class="contributors">
+      <strong>Contributors:</strong> Craig Hepburn (source research), Upendra Shardanand (scoring matrix), Connor Hepburn (product pager)
+    </div>
+  </header>
+
+  <!-- ════ GUIDING PRINCIPLES ════ -->
+  <h2>Guiding Principles</h2>
+  <div class="principles">
+    <div class="lead">Volume is not the constraint. Depth, defensibility, and multi-feature leverage are.</div>
+    <p style="margin-bottom:12px; color:var(--ink-2);">Every source in this document was selected against four tests:</p>
+    <ol>
+      <li>Does it tell us something no other source already covers?</li>
+      <li>Is it free, open access, or achievable via a data partnership at low cost?</li>
+      <li>Is it maintained by an independent, credible organisation and updated regularly?</li>
+      <li>Can it be defended to a journalist, a lawyer, or a company that disputes its score?</li>
+    </ol>
+    <div class="note">A source that fails any one of these tests does not belong in the first batch.</div>
+  </div>
+
+  <!-- ════ SCORING FRAMEWORK ════ -->
+  <h2>Scoring Framework</h2>
+  <p style="color:var(--ink-2); margin-bottom:16px;">All sources have been scored across six dimensions (Upendra's matrix, April 2026):</p>
+
+  <div class="table-wrap table-scoring">
+    <table>
+      <thead>
+        <tr><th>Dimension</th><th>What it measures</th><th>Scale</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><strong>Authority</strong></td><td>Official govt / major institution / established NGO / community / niche</td><td>1&ndash;5</td></tr>
+        <tr><td><strong>Breadth</strong></td><td>Millions of entities / tens of thousands / thousands / hundreds / narrow</td><td>1&ndash;5</td></tr>
+        <tr><td><strong>Depth</strong></td><td>Rich multi-dimensional data / good detail / moderate / single dimension / minimal</td><td>1&ndash;5</td></tr>
+        <tr><td><strong>Ease of Integration</strong></td><td>REST API / API with friction / bulk download / scraping / manual</td><td>1&ndash;5</td></tr>
+        <tr><td><strong>Outrage Potential</strong></td><td>Inherently shareable / strong sharing impulse / moderately interesting / useful but boring / infrastructure</td><td>1&ndash;5</td></tr>
+        <tr><td><strong>Multi-Feature Leverage</strong></td><td>Feeds 5+ features / 3&ndash;4 / 2 / 1 well / narrow single use</td><td>1&ndash;5</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="scoring-note">Maximum score: <strong>30</strong>. Sources scoring 20+ are the strongest candidates for the first build.</div>
+
+  <!-- ════ DEAD SOURCES ════ -->
+  <h2>Dead Sources</h2>
+  <span class="dead-label">Do Not Integrate</span>
+  <div class="table-wrap table-dead">
+    <table>
+      <thead>
+        <tr><th>Source</th><th>Status</th><th>Replacement</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Fakespot</td><td>Shut down July 2025</td><td>ReviewMeta</td></tr>
+        <tr><td>GoodGuide</td><td>Shut down June 2020</td><td>None needed</td></tr>
+        <tr><td>Open Ownership Register</td><td>Closed November 2024</td><td>OpenCorporates</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- ════ TIER 1 ════ -->
+  <h2>Tier 1: Build Now</h2>
+  <p class="tier-intro">All free. All defensible. Build these before anything else.</p>
+
+  <!-- CFPB -->
+  <div class="source-card cat-consumer">
+    <div class="source-header">
+      <div>
+        <h3>CFPB Consumer Complaints</h3>
+        <div class="source-highlight">Highest-scoring source in the full matrix</div>
+      </div>
+      <span class="score-badge score-top">27 / 30</span>
+    </div>
+    <div class="source-body">
+      <dl class="source-meta">
+        <dt>URL</dt>
+        <dd><a href="https://www.consumerfinance.gov/data-research/consumer-complaints/">consumerfinance.gov/data-research/consumer-complaints/</a></dd>
+        <dt>Category</dt>
+        <dd><span class="cat-tag consumer">Consumer Finance / Enforcement</span></dd>
+        <dt>Access</dt>
+        <dd>Free REST API, daily updates</dd>
+        <dt>Coverage</dt>
+        <dd>4 million+ complaints against financial companies &mdash; banks, lenders, debt collectors, credit bureaus</dd>
+        <dt>Features</dt>
+        <dd>
+          <div class="features-list">
+            <span class="feature-pill">Ethics scorecard</span>
+            <span class="feature-pill">Police Report</span>
+            <span class="feature-pill">Consumer harm feed</span>
+          </div>
+        </dd>
+      </dl>
+      <div class="source-use"><strong>Bad Company use:</strong> Primary consumer enforcement signal. "4,000 complaints against X in the last 12 months" is directly shareable. Complements FTC and Violation Tracker for a complete enforcement picture. Missing from our original eight &mdash; should have been Tier 1 from day one.</div>
+      <div class="source-note">CFPB's independence has been politically contested in 2025/26. Data remains publicly available regardless of agency structure.</div>
+    </div>
+  </div>
+
+  <!-- FEC -->
+  <div class="source-card cat-political">
+    <div class="source-header">
+      <div>
+        <h3>FEC Campaign Finance</h3>
+        <div class="source-highlight">Second highest in the full matrix</div>
+      </div>
+      <span class="score-badge score-top">26 / 30</span>
+    </div>
+    <div class="source-body">
+      <dl class="source-meta">
+        <dt>URL</dt>
+        <dd><a href="https://api.open.fec.gov">api.open.fec.gov</a></dd>
+        <dt>Category</dt>
+        <dd><span class="cat-tag political">Political</span></dd>
+        <dt>Access</dt>
+        <dd>Free REST API, excellent documentation</dd>
+        <dt>Coverage</dt>
+        <dd>All federal election contributions by PAC, individual, and committee. Complete federal election history.</dd>
+        <dt>Features</dt>
+        <dd>
+          <div class="features-list">
+            <span class="feature-pill">Political donation tracker</span>
+            <span class="feature-pill">Ethics scorecard</span>
+          </div>
+        </dd>
+      </dl>
+      <div class="source-use"><strong>Bad Company use:</strong> Powers the Political Donation Tracker feature directly. Official federal records &mdash; maximum authority. "Company donated $X to candidate Y" is viral content. Use FEC for federal; Follow the Money for state-level gap-fill.</div>
+      <div class="source-note">The cleanest, best-documented API in the entire stack. Connor should integrate this early.</div>
+    </div>
+  </div>
+
+  <!-- Violation Tracker -->
+  <div class="source-card cat-cross">
+    <div class="source-header">
+      <div>
+        <h3>Violation Tracker</h3>
+      </div>
+      <span class="score-badge score-high">25 / 30</span>
+    </div>
+    <div class="source-body">
+      <dl class="source-meta">
+        <dt>URL</dt>
+        <dd>
+          <a href="https://violationtracker.goodjobsfirst.org">violationtracker.goodjobsfirst.org</a><br>
+          <a href="https://violationtrackerglobal.goodjobsfirst.org">Global version</a> &middot;
+          <a href="https://violationtracker.goodjobsfirst.org/uk">UK version</a>
+        </dd>
+        <dt>Category</dt>
+        <dd><span class="cat-tag cross">Enforcement (Aggregator)</span></dd>
+        <dt>Access</dt>
+        <dd>Free, web search and bulk download</dd>
+        <dt>Coverage</dt>
+        <dd>700,000+ civil and criminal cases from 450+ US federal and state agencies since 2000. Total penalties exceed $1 trillion. Covers banking, consumer protection, environmental, wage and hour, safety, discrimination, price-fixing, bribery. Global and UK versions available.</dd>
+        <dt>Features</dt>
+        <dd>
+          <div class="features-list">
+            <span class="feature-pill">Police Report</span>
+            <span class="feature-pill">Ethics scorecard</span>
+            <span class="feature-pill">Labour scoring</span>
+            <span class="feature-pill">Environmental scoring</span>
+            <span class="feature-pill">Consumer scoring</span>
+            <span class="feature-pill">Governance scoring</span>
+          </div>
+        </dd>
+      </dl>
+      <div class="source-use"><strong>Bad Company use:</strong> The single best cross-dimensional misconduct database available at no cost. Penalty amounts provide financial weighting. Historical trajectory data supports the trajectory scoring model.</div>
+      <div class="source-note">No formal API &mdash; well-structured for scraping. Integrate Violation Tracker before building individual agency connectors; it already aggregates FTC, EPA, OSHA, and 450+ others.</div>
+    </div>
+  </div>
+
+  <!-- EPA ECHO -->
+  <div class="source-card cat-env">
+    <div class="source-header">
+      <div>
+        <h3>EPA ECHO</h3>
+      </div>
+      <span class="score-badge score-high">25 / 30</span>
+    </div>
+    <div class="source-body">
+      <dl class="source-meta">
+        <dt>URL</dt>
+        <dd><a href="https://echo.epa.gov">echo.epa.gov</a></dd>
+        <dt>Category</dt>
+        <dd><span class="cat-tag env">Environmental</span></dd>
+        <dt>Access</dt>
+        <dd>Free REST API (echo.epa.gov/tools/web-services)</dd>
+        <dt>Coverage</dt>
+        <dd>800,000+ regulated facilities. Compliance records, violations, inspections, enforcement actions across Clean Air Act, Clean Water Act, and hazardous waste laws.</dd>
+        <dt>Features</dt>
+        <dd>
+          <div class="features-list">
+            <span class="feature-pill">Ethics scorecard</span>
+            <span class="feature-pill">Police Report</span>
+            <span class="feature-pill">Environmental scoring</span>
+          </div>
+        </dd>
+      </dl>
+      <div class="source-use"><strong>Bad Company use:</strong> Official EPA enforcement data with a proper free API. Environmental violations drive consumer outrage. "Company fined $X for releasing Y into local waterways" is high-outrage content.</div>
+      <div class="source-note">Requires mapping facility-level data to parent companies. Violation Tracker already aggregates a portion of EPA data &mdash; cross-check for duplication.</div>
+    </div>
+  </div>
+
+  <!-- SEC EDGAR -->
+  <div class="source-card cat-gov">
+    <div class="source-header">
+      <div>
+        <h3>SEC EDGAR</h3>
+      </div>
+      <span class="score-badge score-high">25 / 30</span>
+    </div>
+    <div class="source-body">
+      <dl class="source-meta">
+        <dt>URL</dt>
+        <dd><a href="https://data.sec.gov">data.sec.gov</a></dd>
+        <dt>Category</dt>
+        <dd><span class="cat-tag gov">Governance</span></dd>
+        <dt>Access</dt>
+        <dd>Free REST API, no authentication required</dd>
+        <dt>Coverage</dt>
+        <dd>20 million+ filings including 10-K annual reports, 8-K material event filings, proxy statements, executive pay disclosures. All US public companies.</dd>
+        <dt>Features</dt>
+        <dd>
+          <div class="features-list">
+            <span class="feature-pill">Governance scoring</span>
+            <span class="feature-pill">Ethics scorecard</span>
+            <span class="feature-pill">Executive pay tracking</span>
+          </div>
+        </dd>
+      </dl>
+      <div class="source-use"><strong>Bad Company use:</strong> Self-reported litigation and legal risk direct from the company. Executive pay ratios from proxy statements. 8-K filings capture material governance events in real time. Risk disclosure language analysis is a strong AI task for the model.</div>
+      <div class="source-note">US public companies only. Requires NLP to extract relevant content from long documents. The most technically rich free source in the stack.</div>
+    </div>
+  </div>
+
+  <!-- Federal Register -->
+  <div class="source-card cat-regulatory">
+    <div class="source-header">
+      <div>
+        <h3>Federal Register API</h3>
+      </div>
+      <span class="score-badge score-high">25 / 30</span>
+    </div>
+    <div class="source-body">
+      <dl class="source-meta">
+        <dt>URL</dt>
+        <dd><a href="https://www.federalregister.gov/developers/api/v1">federalregister.gov/developers/api/v1</a></dd>
+        <dt>Category</dt>
+        <dd><span class="cat-tag regulatory">Regulatory / Bad Government</span></dd>
+        <dt>Access</dt>
+        <dd>Free REST API, excellent documentation</dd>
+        <dt>Coverage</dt>
+        <dd>All US federal regulatory changes, proposed rules, final rules, executive orders.</dd>
+        <dt>Features</dt>
+        <dd>
+          <div class="features-list">
+            <span class="feature-pill">Consumer harm news feed</span>
+            <span class="feature-pill">Your Rights Right Now</span>
+            <span class="feature-pill">Bad Government pillar</span>
+            <span class="feature-pill">4+ features</span>
+          </div>
+        </dd>
+      </dl>
+      <div class="source-use"><strong>Bad Company use:</strong> Essential infrastructure for the Bad Government pillar. Tracks deregulation events in real time. "Consumer protection rule X was quietly removed on [date]" is exactly the content Bad Company should surface.</div>
+      <div class="source-note">Less viral to average users than enforcement data but non-negotiable for the Bad Government pillar. Pairs with Congress.gov for the full regulatory cycle.</div>
+    </div>
+  </div>
+
+  <!-- FTC -->
+  <div class="source-card cat-consumer">
+    <div class="source-header">
+      <div>
+        <h3>FTC Cases and Proceedings</h3>
+      </div>
+      <span class="score-badge score-high">24 / 30</span>
+    </div>
+    <div class="source-body">
+      <dl class="source-meta">
+        <dt>URL</dt>
+        <dd><a href="https://www.ftc.gov/enforcement/cases-proceedings">ftc.gov/enforcement/cases-proceedings</a></dd>
+        <dt>Category</dt>
+        <dd><span class="cat-tag consumer">Consumer Enforcement</span></dd>
+        <dt>Access</dt>
+        <dd>Free REST API and web</dd>
+        <dt>Coverage</dt>
+        <dd>All FTC enforcement actions for deceptive advertising, dark patterns, subscription traps, fake reviews, privacy violations, anti-competitive behaviour. Expanded dark pattern enforcement since 2022.</dd>
+        <dt>Features</dt>
+        <dd>
+          <div class="features-list">
+            <span class="feature-pill">Sponsored content flag</span>
+            <span class="feature-pill">Influencer checker</span>
+            <span class="feature-pill">Police Report</span>
+            <span class="feature-pill">Subscription trap warning</span>
+            <span class="feature-pill">Consumer manipulation scoring</span>
+          </div>
+        </dd>
+      </dl>
+      <div class="source-use"><strong>Bad Company use:</strong> Primary US consumer manipulation enforcement anchor. Integrate via Violation Tracker first &mdash; it already aggregates FTC data &mdash; and use FTC direct only for feature-specific lookups.</div>
+      <div class="source-note">US-only. Pair with CMA (UK) for full English-language market coverage.</div>
+    </div>
+  </div>
+
+  <!-- CPSC -->
+  <div class="source-card cat-safety">
+    <div class="source-header">
+      <div>
+        <h3>CPSC Recalls API</h3>
+      </div>
+      <span class="score-badge score-high">24 / 30</span>
+    </div>
+    <div class="source-body">
+      <dl class="source-meta">
+        <dt>URL</dt>
+        <dd><a href="https://www.cpsc.gov/Recalls">cpsc.gov/Recalls</a></dd>
+        <dt>Category</dt>
+        <dd><span class="cat-tag safety">Product Safety</span></dd>
+        <dt>Access</dt>
+        <dd>Free REST API with JSON output</dd>
+        <dt>Coverage</dt>
+        <dd>All US Consumer Product Safety Commission product recalls.</dd>
+        <dt>Features</dt>
+        <dd>
+          <div class="features-list">
+            <span class="feature-pill">Product safety alerts</span>
+            <span class="feature-pill">Ethics scorecard</span>
+            <span class="feature-pill">Police Report</span>
+          </div>
+        </dd>
+      </dl>
+      <div class="source-use"><strong>Bad Company use:</strong> Product recalls are among the most shareable consumer safety signals available. "Company X recalled Y product due to Z injury risk" needs no interpretation. Free JSON API makes integration straightforward.</div>
+      <div class="source-note">Pairs with SaferProducts.gov for pre-recall incident signals.</div>
+    </div>
+  </div>
+
+  <!-- Congress.gov -->
+  <div class="source-card cat-regulatory">
+    <div class="source-header">
+      <div>
+        <h3>Congress.gov API</h3>
+      </div>
+      <span class="score-badge score-high">24 / 30</span>
+    </div>
+    <div class="source-body">
+      <dl class="source-meta">
+        <dt>URL</dt>
+        <dd><a href="https://api.congress.gov">api.congress.gov</a></dd>
+        <dt>Category</dt>
+        <dd><span class="cat-tag regulatory">Legislative</span></dd>
+        <dt>Access</dt>
+        <dd>Free REST API, Library of Congress maintained</dd>
+        <dt>Coverage</dt>
+        <dd>Full US legislative tracking &mdash; bills, votes, members, committees.</dd>
+        <dt>Features</dt>
+        <dd>
+          <div class="features-list">
+            <span class="feature-pill">Your Rights Right Now</span>
+            <span class="feature-pill">Consumer harm news feed</span>
+            <span class="feature-pill">Bad Government pillar</span>
+          </div>
+        </dd>
+      </dl>
+      <div class="source-use"><strong>Bad Company use:</strong> Tracks specific consumer protection bills and their status. Voting records on consumer legislation are shareable. Pairs with Federal Register API to show the full cycle: proposed, passed, implemented, reversed.</div>
+      <div class="source-note">Supplement with ProPublica Congress API for better developer experience on specific queries.</div>
+    </div>
+  </div>
+
+  <!-- OSHA -->
+  <div class="source-card cat-labour">
+    <div class="source-header">
+      <div>
+        <h3>OSHA Enforcement</h3>
+      </div>
+      <span class="score-badge score-high">23 / 30</span>
+    </div>
+    <div class="source-body">
+      <dl class="source-meta">
+        <dt>URL</dt>
+        <dd><a href="https://www.osha.gov/data">osha.gov/data</a></dd>
+        <dt>Category</dt>
+        <dd><span class="cat-tag labour">Labour</span></dd>
+        <dt>Access</dt>
+        <dd>Free data portal and bulk download</dd>
+        <dt>Coverage</dt>
+        <dd>Millions of workplace safety inspections, citations, and penalties across US employers.</dd>
+        <dt>Features</dt>
+        <dd>
+          <div class="features-list">
+            <span class="feature-pill">Ethics scorecard</span>
+            <span class="feature-pill">Labour scoring</span>
+            <span class="feature-pill">Police Report</span>
+          </div>
+        </dd>
+      </dl>
+      <div class="source-use"><strong>Bad Company use:</strong> Official workplace safety data. "Company cited for X worker deaths" is maximum outrage. Essential for the Labour dimension.</div>
+      <div class="source-note">US-only. No single REST API. Violation Tracker aggregates OSHA data &mdash; use both, treat Violation Tracker as the primary integration point.</div>
+    </div>
+  </div>
+
+  <!-- Open Food Facts -->
+  <div class="source-card cat-food">
+    <div class="source-header">
+      <div>
+        <h3>Open Food Facts API</h3>
+      </div>
+      <span class="score-badge score-mid">21 / 30</span>
+    </div>
+    <div class="source-body">
+      <dl class="source-meta">
+        <dt>URL</dt>
+        <dd><a href="https://world.openfoodfacts.org/data">world.openfoodfacts.org/data</a></dd>
+        <dt>Category</dt>
+        <dd><span class="cat-tag food">Food / Ingredients</span></dd>
+        <dt>Access</dt>
+        <dd>Free REST API</dd>
+        <dt>Coverage</dt>
+        <dd>3 million+ food products globally. Ingredients, Eco-Score, NOVA processing classification, Nutri-Score.</dd>
+        <dt>Features</dt>
+        <dd>
+          <div class="features-list">
+            <span class="feature-pill">Ethics scorecard</span>
+            <span class="feature-pill">Ingredient checker</span>
+            <span class="feature-pill">Product transparency</span>
+          </div>
+        </dd>
+      </dl>
+      <div class="source-use"><strong>Bad Company use:</strong> Largest free food product database available. Eco-Score provides an environmental signal at product level. Essential for consumer-facing product transparency features.</div>
+      <div class="source-note">Community-maintained &mdash; quality varies. Strongest for packaged food in European markets.</div>
+    </div>
+  </div>
+
+  <!-- SaferProducts -->
+  <div class="source-card cat-safety">
+    <div class="source-header">
+      <div>
+        <h3>SaferProducts.gov API</h3>
+      </div>
+      <span class="score-badge score-mid">21 / 30</span>
+    </div>
+    <div class="source-body">
+      <dl class="source-meta">
+        <dt>URL</dt>
+        <dd><a href="https://www.saferproducts.gov/RestWebServices">saferproducts.gov/RestWebServices</a></dd>
+        <dt>Category</dt>
+        <dd><span class="cat-tag safety">Product Safety</span></dd>
+        <dt>Access</dt>
+        <dd>Free REST API</dd>
+        <dt>Coverage</dt>
+        <dd>Consumer product incident reports submitted before recalls are issued &mdash; pre-recall signals.</dd>
+        <dt>Features</dt>
+        <dd>
+          <div class="features-list">
+            <span class="feature-pill">Product safety early warning</span>
+          </div>
+        </dd>
+      </dl>
+      <div class="source-use"><strong>Bad Company use:</strong> "Consumers have filed 47 injury reports against this product" is compelling before a formal recall exists. Pairs with CPSC Recalls as a two-stage product safety signal.</div>
+    </div>
+  </div>
+
+  <!-- CourtListener -->
+  <div class="source-card cat-legal">
+    <div class="source-header">
+      <div>
+        <h3>CourtListener API</h3>
+      </div>
+      <span class="score-badge score-mid">21 / 30</span>
+    </div>
+    <div class="source-body">
+      <dl class="source-meta">
+        <dt>URL</dt>
+        <dd><a href="https://www.courtlistener.com/api/">courtlistener.com/api/</a></dd>
+        <dt>Category</dt>
+        <dd><span class="cat-tag legal">Legal</span></dd>
+        <dt>Access</dt>
+        <dd>Free REST API, RECAP archive</dd>
+        <dt>Coverage</dt>
+        <dd>Millions of federal court opinions and filings.</dd>
+        <dt>Features</dt>
+        <dd>
+          <div class="features-list">
+            <span class="feature-pill">Class action lookup</span>
+            <span class="feature-pill">Legal depth</span>
+          </div>
+        </dd>
+      </dl>
+      <div class="source-use"><strong>Bad Company use:</strong> Legal records carry maximum authority. Free API makes this significantly easier to integrate than ClassAction.org scraping. Use ClassAction.org for consumer-facing "you may be owed money" surface; use CourtListener for the underlying legal record depth.</div>
+    </div>
+  </div>
+
+  <!-- ToS;DR -->
+  <div class="source-card cat-consumer">
+    <div class="source-header">
+      <div>
+        <h3>ToS;DR API</h3>
+      </div>
+      <span class="score-badge score-mid">20 / 30</span>
+    </div>
+    <div class="source-body">
+      <dl class="source-meta">
+        <dt>URL</dt>
+        <dd><a href="https://api.tosdr.org">api.tosdr.org</a></dd>
+        <dt>Category</dt>
+        <dd><span class="cat-tag consumer">Terms of Service</span></dd>
+        <dt>Access</dt>
+        <dd>Free REST API (intermittent &mdash; monitor reliability)</dd>
+        <dt>Coverage</dt>
+        <dd>Community-reviewed Terms of Service ratings (A&ndash;E) for major digital services.</dd>
+        <dt>Features</dt>
+        <dd>
+          <div class="features-list">
+            <span class="feature-pill">TOS summariser</span>
+            <span class="feature-pill">Hidden fee revealer</span>
+            <span class="feature-pill">Subscription trap warning</span>
+            <span class="feature-pill">Return gotcha flag</span>
+          </div>
+        </dd>
+      </dl>
+      <div class="source-use"><strong>Bad Company use:</strong> High multi-feature leverage. Pre-rated ToS data feeds multiple scam detection features without requiring real-time NLP.</div>
+      <div class="source-note">Build a fallback given API reliability issues.</div>
+    </div>
+  </div>
+
+  <!-- Google Safe Browsing -->
+  <div class="source-card cat-site">
+    <div class="source-header">
+      <div>
+        <h3>Google Safe Browsing</h3>
+      </div>
+      <span class="score-badge score-mid">20 / 30</span>
+    </div>
+    <div class="source-body">
+      <dl class="source-meta">
+        <dt>URL</dt>
+        <dd><a href="https://developers.google.com/safe-browsing">developers.google.com/safe-browsing</a></dd>
+        <dt>Category</dt>
+        <dd><span class="cat-tag site">Site Safety</span></dd>
+        <dt>Access</dt>
+        <dd>Free REST API (10,000 requests/day free tier)</dd>
+        <dt>Coverage</dt>
+        <dd>Billions of URLs checked for phishing, malware, and deceptive content.</dd>
+        <dt>Features</dt>
+        <dd>
+          <div class="features-list">
+            <span class="feature-pill">Sketchy site flag</span>
+          </div>
+        </dd>
+      </dl>
+      <div class="source-use"><strong>Bad Company use:</strong> Pure safety infrastructure for the Chrome extension. Every URL visited is checked in real time. Zero-friction integration.</div>
+      <div class="source-note">Monitor usage at scale &mdash; may need a paid tier as user base grows.</div>
+    </div>
+  </div>
+
+  <!-- ClassAction.org -->
+  <div class="source-card cat-legal">
+    <div class="source-header">
+      <div>
+        <h3>ClassAction.org</h3>
+      </div>
+      <span class="score-badge score-mid">18 / 30</span>
+    </div>
+    <div class="source-body">
+      <dl class="source-meta">
+        <dt>URL</dt>
+        <dd><a href="https://www.classaction.org">classaction.org</a></dd>
+        <dt>Category</dt>
+        <dd><span class="cat-tag legal">Legal</span></dd>
+        <dt>Access</dt>
+        <dd>Free, web scraping required</dd>
+        <dt>Coverage</dt>
+        <dd>Active and settled class action lawsuits, daily updates.</dd>
+        <dt>Features</dt>
+        <dd>
+          <div class="features-list">
+            <span class="feature-pill">Class action lookup</span>
+          </div>
+        </dd>
+      </dl>
+      <div class="source-use"><strong>Bad Company use:</strong> "You might be owed money from this company" is one of the most shareable consumer signals possible. Use alongside CourtListener for depth.</div>
+      <div class="source-note">No API &mdash; scraping required. CourtListener is the better integration for depth.</div>
+    </div>
+  </div>
+
+  <!-- ════ TIER 2 ════ -->
+  <h2>Tier 2: Build Next</h2>
+  <p class="tier-intro">High value but require scraping, partnerships, or have access constraints. Build after Tier 1 is stable.</p>
+
+  <div class="table-wrap table-tier">
+    <table>
+      <thead>
+        <tr><th>Source</th><th>Score</th><th>URL</th><th>Access</th><th>Key Use</th><th>Notes</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>OpenSecrets</td>
+          <td>25/30</td>
+          <td><a href="https://opensecrets.org/bulk-data">opensecrets.org/bulk-data</a></td>
+          <td>Free bulk CSV</td>
+          <td>Political lobbying and dark money</td>
+          <td>API deprecated; use bulk CSV</td>
+        </tr>
+        <tr>
+          <td>ICIJ Offshore Leaks</td>
+          <td>21/30</td>
+          <td><a href="https://offshoreleaks.icij.org">offshoreleaks.icij.org</a></td>
+          <td>Free search</td>
+          <td>Tax haven and governance override signal</td>
+          <td>810,000 entities; event-driven coverage</td>
+        </tr>
+        <tr>
+          <td>iFixit Repairability</td>
+          <td>21/30</td>
+          <td><a href="https://ifixit.com/api/2.0/doc">ifixit.com/api/2.0/doc</a></td>
+          <td>Free REST API</td>
+          <td>Product repairability scores</td>
+          <td>Electronics-focused; unique data</td>
+        </tr>
+        <tr>
+          <td>BHRRC</td>
+          <td>~23/30 est.</td>
+          <td><a href="https://business-humanrights.org">business-humanrights.org</a></td>
+          <td>Free JSON API</td>
+          <td>Labour and human rights allegations</td>
+          <td>Not in Upendra's matrix &mdash; score and add</td>
+        </tr>
+        <tr>
+          <td>Climate Trace</td>
+          <td>20/30</td>
+          <td><a href="https://climatetrace.org">climatetrace.org</a></td>
+          <td>Free data portal</td>
+          <td>Satellite-based GHG; not self-reported</td>
+          <td>Use as CDP verification layer</td>
+        </tr>
+        <tr>
+          <td>Follow the Money</td>
+          <td>20/30</td>
+          <td><a href="https://followthemoney.org">followthemoney.org</a></td>
+          <td>Free bulk download</td>
+          <td>State-level campaign finance</td>
+          <td>Fills FEC gap for state elections</td>
+        </tr>
+        <tr>
+          <td>CDP</td>
+          <td>19/30</td>
+          <td><a href="https://cdp.net/en/data/scores">cdp.net/en/data/scores</a></td>
+          <td>Partial free</td>
+          <td>Climate A&ndash;D scores for 23,000 companies</td>
+          <td>Pursue NGO data partnership</td>
+        </tr>
+        <tr>
+          <td>KnowTheChain</td>
+          <td>18/30</td>
+          <td><a href="https://knowthechain.org">knowthechain.org</a></td>
+          <td>Free reports</td>
+          <td>Forced labour benchmarks 0&ndash;100</td>
+          <td>Annual; three sectors only</td>
+        </tr>
+        <tr>
+          <td>World Benchmarking Alliance</td>
+          <td>17/30</td>
+          <td><a href="https://worldbenchmarkingalliance.org">worldbenchmarkingalliance.org</a></td>
+          <td>Free Excel</td>
+          <td>2,000 companies; 18 social indicators</td>
+          <td>Annual; public disclosure derived</td>
+        </tr>
+        <tr>
+          <td>Good On You</td>
+          <td>18/30</td>
+          <td><a href="https://goodonyou.eco">goodonyou.eco</a></td>
+          <td>Partnership API</td>
+          <td>6,000 brand ethical ratings</td>
+          <td>Partnership needed for API access</td>
+        </tr>
+        <tr>
+          <td>B Corp Directory</td>
+          <td>16/30</td>
+          <td><a href="https://bcorporation.net">bcorporation.net</a></td>
+          <td>Free directory</td>
+          <td>Positive certification signal</td>
+          <td>Positive signal; low outrage</td>
+        </tr>
+        <tr>
+          <td>SBTi Target Dashboard</td>
+          <td>15/30</td>
+          <td><a href="https://sciencebasedtargets.org">sciencebasedtargets.org</a></td>
+          <td>Free weekly Excel</td>
+          <td>Net-zero target validation</td>
+          <td>Binary signal; weekly updates</td>
+        </tr>
+        <tr>
+          <td>EPA TRI</td>
+          <td>20/30</td>
+          <td><a href="https://epa.gov/toxics-release-inventory">epa.gov/toxics-release-inventory</a></td>
+          <td>Free bulk</td>
+          <td>Toxic chemical releases by facility</td>
+          <td>Annual reporting</td>
+        </tr>
+        <tr>
+          <td>Boycat</td>
+          <td>17/30</td>
+          <td>Partnership</td>
+          <td>Free</td>
+          <td>Boycott data; 3M users</td>
+          <td>Growing; geopolitically comprehensive</td>
+        </tr>
+        <tr>
+          <td>CA DROP Platform</td>
+          <td>16/30</td>
+          <td><a href="https://cppa.ca.gov">cppa.ca.gov</a></td>
+          <td>Free</td>
+          <td>Data broker deletion; 500+ brokers</td>
+          <td>Launched January 2026</td>
+        </tr>
+        <tr>
+          <td>EPA CPDat</td>
+          <td>20/30</td>
+          <td><a href="https://epa.gov">epa.gov</a></td>
+          <td>Free database</td>
+          <td>Chemical product safety</td>
+          <td>Feeds ingredient checker</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- ════ TIER 3 ════ -->
+  <h2>Tier 3: Paid / Partnership &mdash; Build Later</h2>
+  <p class="tier-intro">Do not block V1 on these. Revisit when funding and partnerships allow.</p>
+
+  <div class="table-wrap table-tier table-tier3">
+    <table>
+      <thead>
+        <tr><th>Source</th><th>Score</th><th>Cost</th><th>Why It Matters</th><th>When to Pursue</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Keepa</td>
+          <td>24/30</td>
+          <td>&euro;15&ndash;53.5K/month</td>
+          <td>Gold standard Amazon price history</td>
+          <td>When Save Money pillar is priority</td>
+        </tr>
+        <tr>
+          <td>RepRisk</td>
+          <td>21/30</td>
+          <td>Enterprise</td>
+          <td>Real-time AI ESG monitoring; 130,000 companies</td>
+          <td>When funding allows</td>
+        </tr>
+        <tr>
+          <td>MSCI ESG</td>
+          <td>18/30</td>
+          <td>Enterprise</td>
+          <td>Institutional-grade ESG for 8,500 companies</td>
+          <td>When investor-facing product is in scope</td>
+        </tr>
+        <tr>
+          <td>Sustainalytics</td>
+          <td>18/30</td>
+          <td>Enterprise</td>
+          <td>Deep ESG risk for 20,000+ companies</td>
+          <td>Same as MSCI</td>
+        </tr>
+        <tr>
+          <td>Consumer Reports</td>
+          <td>18/30</td>
+          <td>Membership</td>
+          <td>Most trusted independent product testing</td>
+          <td>Pursue partnership; mission alignment</td>
+        </tr>
+        <tr>
+          <td>SerpApi</td>
+          <td>19/30</td>
+          <td>$50&ndash;250/month</td>
+          <td>Cross-retailer pricing via Google Shopping</td>
+          <td>When cross-site price comparison is in build</td>
+        </tr>
+        <tr>
+          <td>Parent Company API</td>
+          <td>20/30</td>
+          <td>Usage-based</td>
+          <td>Maps brands to parent companies &mdash; gates all Shop Your Values features</td>
+          <td>High priority once feature set is confirmed</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- ════ INFRASTRUCTURE ════ -->
+  <h2>Infrastructure Approach</h2>
+  <div class="infra-box">
+    <p>All source data is stored as structured markdown files in this repository. This is intentional.</p>
+    <p>Markdown files are the native medium of AI agents. No database connection, no schema, no driver, no query plan required. Any model, any pipeline, and any team member can read them immediately. When a source changes, the file is edited and committed &mdash; no migrations, no downtime.</p>
+    <p>As the file count grows, a vector database layer (Pinecone, Weaviate, or Chroma) will be added as a retrieval index on top of the markdown files. The markdown files remain the source of truth at all times.</p>
+    <div class="callout"><strong>Connor:</strong> evaluate Wikirate (wikirate.org) before building individual source scrapers. It already aggregates data from KnowTheChain, Violation Tracker, and WBA via a single free REST API and may significantly reduce the number of individual connectors required.</div>
+  </div>
+
+  <!-- ════ OPEN QUESTIONS ════ -->
+  <h2>Open Questions for Team Discussion</h2>
+  <div class="questions">
+    <div class="question-item">
+      <div class="question-num">Question 1</div>
+      <div class="question-title">BHRRC tier placement</div>
+      <div class="question-body">Based on independent research, BHRRC should likely be Tier 1 alongside Violation Tracker &mdash; open JSON API, 20,000+ companies, real-time allegations. It was not in Upendra's matrix. Needs to be scored and added to the spreadsheet before the next discussion.</div>
+    </div>
+    <div class="question-item">
+      <div class="question-num">Question 2</div>
+      <div class="question-title">CDP access</div>
+      <div class="question-body">The 2025 access change means full disclosure data is now behind a paywall. Do we pursue the NGO data partnership now, or build around public scores and fill the gap with Climate Trace until funding allows?</div>
+    </div>
+    <div class="question-item">
+      <div class="question-num">Question 3</div>
+      <div class="question-title">Parent Company API</div>
+      <div class="question-body">Without a parent company mapping layer, every Shop Your Values feature breaks when a user searches for a brand name rather than its parent company. This is a Tier 2 dependency that gates multiple features. Needs a decision on cost and timing before V3 feature scoping.</div>
+    </div>
+    <div class="question-item">
+      <div class="question-num">Question 4</div>
+      <div class="question-title">CFPB independence</div>
+      <div class="question-body">The CFPB has faced political pressure in 2025/26. Data remains publicly available regardless, but the team should monitor the agency's operational status and have a contingency plan for the consumer complaints data.</div>
+    </div>
+    <div class="question-item">
+      <div class="question-num">Question 5</div>
+      <div class="question-title">Wikirate evaluation</div>
+      <div class="question-body">Connor to assess whether Wikirate's aggregation layer reduces integration complexity sufficiently to change the build sequence. This could meaningfully compress the Tier 1 build timeline.</div>
+    </div>
+  </div>
+
+  <!-- ════ VERSION HISTORY ════ -->
+  <h2>Version History</h2>
+  <div class="table-wrap version-table">
+    <table>
+      <thead>
+        <tr><th>Version</th><th>Date</th><th>Change</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>1.0</td>
+          <td>April 2026</td>
+          <td>Initial eight-source first batch (Craig Hepburn independent research)</td>
+        </tr>
+        <tr>
+          <td>2.0</td>
+          <td>April 2026</td>
+          <td>Full consolidation with Upendra's scoring matrix and Connor's product pager. Expanded to full Tier 1/2/3 structure. Dead sources flagged. BHRRC gap identified. Five open questions documented.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- ════ FOOTER ════ -->
+  <div class="footer">Bad Company &mdash; Internal Documentation. Not for external distribution.</div>
+
+</div>
+
+</body>
+</html>
